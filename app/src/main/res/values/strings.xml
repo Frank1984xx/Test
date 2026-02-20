@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyApp</string>
+    <string name="fab_description">Aggiungi elemento</string>
+    <string name="action_settings">Impostazioni</string>
+</resources>
