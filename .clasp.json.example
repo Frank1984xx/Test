@@ -1,0 +1,15 @@
+{
+  "scriptId": "INSERISCI_QUI_LO_SCRIPT_ID",
+  "rootDir": ".",
+  "filePushOrder": [
+    "appsscript.json",
+    "src/00_Config.gs",
+    "src/01_Sheets.gs",
+    "src/02_Repo.gs",
+    "src/03_Ordini.gs",
+    "src/04_Bolle.gs",
+    "src/05_Prezzi.gs",
+    "src/06_Fatture.gs",
+    "src/10_WebApp.gs"
+  ]
+}

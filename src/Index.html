@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --muted:#94a3b8; --fg:#e2e8f0;
+            --accent:#38bdf8; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; --line:#334155; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+           background:var(--bg); color:var(--fg); }
+    header { padding:16px 24px; border-bottom:1px solid var(--line);
+             display:flex; align-items:center; gap:12px; }
+    header h1 { font-size:18px; margin:0; }
+    header .sub { color:var(--muted); font-size:13px; }
+    nav { display:flex; gap:8px; padding:12px 24px; border-bottom:1px solid var(--line); }
+    nav button { background:transparent; color:var(--muted); border:1px solid var(--line);
+                 padding:8px 14px; border-radius:8px; cursor:pointer; font-size:14px; }
+    nav button.active { color:var(--fg); border-color:var(--accent); background:rgba(56,189,248,.1); }
+    main { padding:24px; max-width:1100px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+    .kpi .n { font-size:30px; font-weight:700; }
+    .kpi .l { color:var(--muted); font-size:13px; margin-top:4px; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+    th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-weight:600; }
+    label { display:block; font-size:13px; color:var(--muted); margin:12px 0 4px; }
+    input,select { width:100%; padding:9px 10px; background:#0b1220; color:var(--fg);
+                   border:1px solid var(--line); border-radius:8px; font-size:14px; }
+    .btn { background:var(--accent); color:#08131f; border:none; padding:10px 16px;
+           border-radius:8px; font-weight:600; cursor:pointer; font-size:14px; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn.secondary { background:transparent; color:var(--fg); border:1px solid var(--line); }
+    .pill { padding:2px 8px; border-radius:999px; font-size:12px; }
+    .pill.ok { background:rgba(34,197,94,.15); color:var(--ok); }
+    .pill.no { background:rgba(239,68,68,.15); color:var(--err); }
+    .row-line { display:grid; grid-template-columns:2fr 1fr auto; gap:8px; align-items:end; margin-bottom:8px; }
+    .hidden { display:none; }
+    .muted { color:var(--muted); }
+    .alert { color:var(--warn); }
+    #toast { position:fixed; bottom:24px; right:24px; background:var(--card);
+             border:1px solid var(--accent); padding:12px 16px; border-radius:10px;
+             max-width:360px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Order</h1>
+    <span class="sub">Gruppo Ethos — approvvigionamenti</span>
+  </header>
+
+  <nav>
+    <button data-tab="dashboard" class="active">Dashboard</button>
+    <button data-tab="nuovo">Nuovo ordine</button>
+    <button data-tab="ordini">Ordini</button>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard">
+      <div class="grid" id="kpis"><div class="card muted">Caricamento…</div></div>
+      <div class="card" style="margin-top:20px">
+        <strong>Alert scostamenti prezzo</strong>
+        <div id="alertPrezzi"><p class="muted">Caricamento…</p></div>
+      </div>
+    </section>
+
+    <!-- NUOVO ORDINE -->
+    <section id="tab-nuovo" class="hidden">
+      <div class="card">
+        <label>Ristorante</label>
+        <select id="selRistorante"></select>
+        <label>Fornitore</label>
+        <select id="selFornitore"><option value="">—</option></select>
+        <label>Data consegna prevista</label>
+        <input type="date" id="dataConsegna">
+
+        <div style="margin-top:16px"><strong>Righe ordine</strong></div>
+        <div id="righe"></div>
+        <button class="btn secondary" id="addRiga" style="margin-top:8px">+ Riga</button>
+
+        <div style="margin-top:16px">
+          <label style="display:inline">
+            <input type="checkbox" id="inviaEmail" checked style="width:auto"> invia email al fornitore
+          </label>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px; align-items:center">
+          <button class="btn" id="salvaOrdine">Crea ordine</button>
+          <span id="totale" class="muted"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORDINI -->
+    <section id="tab-ordini" class="hidden">
+      <div class="card">
+        <strong>Ordini recenti</strong>
+        <div id="tabellaOrdini"><p class="muted">Caricamento…</p></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="hidden"></div>
+
+<script>
+  var STATE = { ristoranti: [], listino: [] };
+
+  function $(id){ return document.getElementById(id); }
+  function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.remove('hidden');
+    setTimeout(function(){ t.classList.add('hidden'); }, 5000); }
+  function euro(n){ return '€ ' + (Number(n)||0).toFixed(2).replace('.', ','); }
+
+  // Navigazione tab
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('nav button').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      ['dashboard','nuovo','ordini'].forEach(function(t){
+        $('tab-'+t).classList.toggle('hidden', t !== b.dataset.tab);
+      });
+      if (b.dataset.tab === 'ordini') caricaOrdini();
+      if (b.dataset.tab === 'dashboard') caricaDashboard();
+    });
+  });
+
+  // Bootstrap
+  google.script.run.withSuccessHandler(function(data){
+    STATE.ristoranti = data.ristoranti;
+    var sel = $('selRistorante');
+    sel.innerHTML = '<option value="">—</option>' + data.ristoranti.map(function(r){
+      return '<option value="'+r.id+'">'+r.nome+'</option>';
+    }).join('');
+    renderKpi(data.riepilogo);
+    caricaAlert();
+  }).withFailureHandler(function(e){ toast('Errore: '+e.message); }).apiBootstrap();
+
+  function caricaDashboard(){
+    google.script.run.withSuccessHandler(renderKpi).apiRiepilogo();
+    caricaAlert();
+  }
+  function renderKpi(r){
+    var perStato = Object.keys(r.ordiniPerStato||{}).map(function(k){
+      return k+': '+r.ordiniPerStato[k];
+    }).join(' · ') || '—';
+    $('kpis').innerHTML = [
+      kpi(r.ordiniTotali, 'Ordini totali'),
+      kpi(r.bolleDaVerificare, 'Bolle da verificare'),
+      kpi(r.alertPrezzi, 'Alert prezzo'),
+      '<div class="card"><div class="l muted">Per stato</div><div style="margin-top:6px">'+perStato+'</div></div>'
+    ].join('');
+  }
+  function kpi(n,l){ return '<div class="card kpi"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
+
+  function caricaAlert(){
+    google.script.run.withSuccessHandler(function(rows){
+      if(!rows.length){ $('alertPrezzi').innerHTML='<p class="muted">Nessuno scostamento oltre soglia.</p>'; return; }
+      $('alertPrezzi').innerHTML = '<table><tr><th>Data</th><th>Ordine</th><th>Prodotto</th>'+
+        '<th>Sistema</th><th>Bolla</th><th>Var.</th></tr>' + rows.map(function(a){
+        return '<tr><td>'+a.data+'</td><td>'+a.ordine+'</td><td>'+a.prodotto+'</td>'+
+          '<td>'+euro(a.sistema)+'</td><td>'+euro(a.bolla)+'</td>'+
+          '<td class="alert">'+a.variazione+'%</td></tr>';
+      }).join('') + '</table>';
+    }).apiAlertPrezzi();
+  }
+
+  // Nuovo ordine
+  $('selRistorante').addEventListener('change', function(){
+    var id=this.value; var fs=$('selFornitore');
+    fs.innerHTML='<option value="">—</option>';
+    if(!id) return;
+    google.script.run.withSuccessHandler(function(forn){
+      fs.innerHTML='<option value="">—</option>'+forn.map(function(f){
+        return '<option value="'+f.id+'">'+f.nome+(f.email?'':' (no email)')+'</option>';
+      }).join('');
+    }).apiFornitori(id);
+  });
+
+  $('selFornitore').addEventListener('change', function(){
+    var id=this.value; STATE.listino=[];
+    if(!id){ $('righe').innerHTML=''; return; }
+    google.script.run.withSuccessHandler(function(l){
+      STATE.listino=l; $('righe').innerHTML=''; addRiga();
+    }).apiListino(id);
+  });
+
+  $('addRiga').addEventListener('click', addRiga);
+  function addRiga(){
+    var opts = STATE.listino.map(function(p){
+      return '<option value="'+p.codice+'">'+p.codice+' — '+p.nome+' ('+euro(p.prezzo)+')</option>';
+    }).join('');
+    var div=document.createElement('div'); div.className='row-line';
+    div.innerHTML = '<select class="r-cod"><option value="">—</option>'+opts+'</select>'+
+      '<input type="number" class="r-qta" min="0" step="1" placeholder="Q.tà">'+
+      '<button class="btn secondary r-del">✕</button>';
+    div.querySelector('.r-del').addEventListener('click', function(){ div.remove(); calcTot(); });
+    div.querySelector('.r-qta').addEventListener('input', calcTot);
+    div.querySelector('.r-cod').addEventListener('change', calcTot);
+    $('righe').appendChild(div);
+  }
+  function raccogliRighe(){
+    return Array.prototype.map.call(document.querySelectorAll('#righe .row-line'), function(d){
+      return { codice:d.querySelector('.r-cod').value, quantita:d.querySelector('.r-qta').value };
+    }).filter(function(r){ return r.codice && Number(r.quantita)>0; });
+  }
+  function calcTot(){
+    var tot = raccogliRighe().reduce(function(s,r){
+      var p=STATE.listino.find(function(x){ return x.codice===r.codice; });
+      return s + (p?p.prezzo:0)*Number(r.quantita);
+    },0);
+    $('totale').textContent = tot ? 'Totale stimato: '+euro(tot) : '';
+  }
+
+  $('salvaOrdine').addEventListener('click', function(){
+    var righe=raccogliRighe();
+    if(!$('selRistorante').value){ toast('Seleziona un ristorante.'); return; }
+    if(!$('selFornitore').value){ toast('Seleziona un fornitore.'); return; }
+    if(!righe.length){ toast('Aggiungi almeno una riga.'); return; }
+    this.disabled=true; var btn=this;
+    google.script.run.withSuccessHandler(function(res){
+      btn.disabled=false;
+      var msg='Ordine '+res.idOrdine+' creato ('+euro(res.totale)+'). ' +
+        (res.emailInviata?'Email inviata.':'Email NON inviata.');
+      if(res.avvisi && res.avvisi.length) msg += ' ' + res.avvisi.join(' ');
+      toast(msg);
+      $('righe').innerHTML=''; addRiga(); calcTot();
+    }).withFailureHandler(function(e){ btn.disabled=false; toast('Errore: '+e.message); })
+    .apiCreaOrdine({
+      idRistorante:$('selRistorante').value,
+      idFornitore:$('selFornitore').value,
+      dataConsegnaPrevista:$('dataConsegna').value,
+      righe:righe,
+      inviaEmail:$('inviaEmail').checked
+    });
+  });
+
+  // Ordini
+  function caricaOrdini(){
+    google.script.run.withSuccessHandler(function(rows){
+      if(!rows.length){ $('tabellaOrdini').innerHTML='<p class="muted">Nessun ordine.</p>'; return; }
+      $('tabellaOrdini').innerHTML='<table><tr><th>ID</th><th>Ristorante</th><th>Fornitore</th>'+
+        '<th>Data</th><th>Stato</th><th>Totale</th><th>Email</th></tr>'+rows.map(function(o){
+        return '<tr><td>'+o.id+'</td><td>'+o.ristorante+'</td><td>'+o.fornitore+'</td>'+
+          '<td>'+o.data+'</td><td>'+o.stato+'</td><td>'+euro(o.totale)+'</td>'+
+          '<td><span class="pill '+(o.emailInviata?'ok':'no')+'">'+
+          (o.emailInviata?'sì':'no')+'</span></td></tr>';
+      }).join('')+'</table>';
+    }).apiElencoOrdini(100);
+  }
+</script>
+</body>
+</html>
