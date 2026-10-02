@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ebe4d8">
+<title>Margherita in AR · Acqua e Farina</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: scheda di menu a pagina intera — il piatto in 3D occupa la scena, la scheda (nome, ingredienti, prezzo, pulsante AR) sta sotto sul telefono e a destra su schermo largo. */
+  :root {
+    --bg: #ebe4d8;
+    --paper: #f5f0e6;
+    --ink: #1d1a16;
+    --muted: #6f675c;
+    --line: rgba(29, 26, 22, .16);
+    --line-strong: rgba(29, 26, 22, .45);
+    --tomato: #b3261e;
+    --basil: #3d6b35;
+    --serif: "Instrument Serif", "Iowan Old Style", Palatino, Georgia, serif;
+    --sans: "Instrument Sans", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    --gutter: clamp(16px, 3vw, 40px);
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #16130f; --paper: #211d18; --ink: #efe8db; --muted: #a39a8c; --line: rgba(239,232,219,.16); --line-strong: rgba(239,232,219,.5); --tomato: #e0493d; --basil: #7fb36f; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: #16130f; --paper: #211d18; --ink: #efe8db; --muted: #a39a8c; --line: rgba(239,232,219,.16); --line-strong: rgba(239,232,219,.5); --tomato: #e0493d; --basil: #7fb36f; color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); -webkit-font-smoothing: antialiased; padding-block: 0; padding-inline: 0; }
+  .wrap { min-height: 100%; display: grid; grid-template-rows: auto 1fr auto; padding-inline: var(--gutter); padding-block: var(--gutter) calc(var(--gutter) + env(safe-area-inset-bottom, 0px)); gap: 18px; max-width: 1180px; margin: 0 auto; }
+
+  .kicker { font: 500 10.5px/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+  header.top .num { font: 400 13px var(--mono); color: var(--muted); letter-spacing: .08em; }
+
+  .main { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .9fr); gap: 24px; align-items: stretch; }
+  .scene { position: relative; min-height: 420px; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 70%, rgba(0,0,0,.08), transparent 70%), var(--paper); overflow: hidden; }
+  model-viewer { width: 100%; height: 100%; min-height: 420px; display: block; --poster-color: transparent; }
+  .ar-slot { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+  .scene .corner { position: absolute; left: 14px; top: 12px; display: flex; gap: 8px; align-items: center; font: 500 10.5px var(--mono); letter-spacing: .12em; color: var(--muted); }
+  .scene .corner .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--basil); animation: breathe 2.4s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .35; } }
+  .scene .hint { position: absolute; left: 14px; bottom: 12px; font: italic 13px var(--serif); color: var(--muted); pointer-events: none; }
+  .progress { position: absolute; left: 0; top: 0; height: 2px; background: var(--tomato); width: 0; transition: width .2s; }
+
+  .card { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); background: var(--paper); padding: 22px 22px 18px; min-width: 0; }
+  .card h1 { font: italic 400 clamp(44px, 6vw, 72px)/.9 var(--serif); letter-spacing: -.02em; margin: 10px 0 14px; text-wrap: balance; }
+  .price { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .price .v { font: 400 24px var(--mono); font-variant-numeric: tabular-nums; }
+  .ingr { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; font: 400 16px/1.35 var(--serif); }
+  .ingr li { display: flex; gap: 10px; align-items: baseline; }
+  .ingr li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--tomato); flex: none; transform: translateY(-2px); }
+  .ingr li:nth-child(2)::before { background: #e8dcc0; border: 1px solid var(--line-strong); }
+  .ingr li:nth-child(3)::before { background: var(--basil); }
+  .ingr li:nth-child(4)::before { background: #e3b53a; }
+  .note { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
+
+  .actions { display: grid; gap: 8px; margin-top: auto; padding-top: 18px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid var(--line-strong); background: transparent; color: inherit; padding: 12px 14px; min-height: 46px; cursor: pointer; font: 500 13.5px var(--sans); letter-spacing: .01em; text-decoration: none; }
+  .btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn.primary:hover { background: var(--tomato); border-color: var(--tomato); color: #fff; }
+  .btn:hover:not(.primary) { border-color: var(--ink); }
+  .btn:focus-visible { outline: 2px solid var(--tomato); outline-offset: 2px; }
+  .ar-fallback { font-size: 12px; color: var(--muted); }
+  .ar-fallback[hidden] { display: none; }
+
+  footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 11.5px; border-top: 1px solid var(--line); padding-top: 12px; }
+  footer code { font: 400 11px var(--mono); }
+
+  @media (max-width: 760px) {
+    .main { grid-template-columns: 1fr; }
+    .scene, model-viewer { min-height: 62vh; }
+    .card { padding: 18px 16px 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .scene .corner .dot { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">Acqua e Farina · Agrate Brianza · Le pizze</div>
+    <div class="num">01 / MARGHERITA</div>
+  </header>
+
+  <div class="main">
+    <div class="scene">
+      <div class="progress" id="progress"></div>
+      <model-viewer id="mv" src="margherita.glb" alt="Pizza Margherita su tagliere, modello 3D"
+        ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
+        camera-controls touch-action="pan-y" auto-rotate rotation-per-second="18deg"
+        camera-orbit="25deg 62deg 0.7m" min-camera-orbit="auto 20deg 0.35m" max-camera-orbit="auto 88deg 1.6m"
+        field-of-view="30deg" shadow-intensity="1.1" shadow-softness="0.8" exposure="0.95" tone-mapping="aces"
+        interaction-prompt="none" loading="eager">
+        <button slot="ar-button" class="btn primary ar-slot" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
+          Vedi sul tavolo
+        </button>
+      </model-viewer>
+      <div class="corner"><span class="dot"></span><span id="state">DAL FORNO</span></div>
+      <div class="hint">Trascina per girarla, pizzica per avvicinarti.</div>
+    </div>
+
+    <aside class="card">
+      <div class="kicker">Classica · forno a legna</div>
+      <h1>Margherita</h1>
+      <div class="price"><span class="kicker">Prezzo</span><span class="v">€ 8,50</span></div>
+      <ul class="ingr">
+        <li>Pomodoro San Marzano</li>
+        <li>Fior di latte</li>
+        <li>Basilico fresco</li>
+        <li>Olio extravergine</li>
+      </ul>
+      <p class="note">Ø 32 cm, 8 fette. Impasto a lunga lievitazione, cottura 90 secondi a 450°. Allergeni: glutine, latte.</p>
+      <div class="actions">
+        <p class="ar-fallback" id="arfb" hidden>Su questo dispositivo l'AR non è disponibile: apri la pagina dal telefono (Android con Chrome, iPhone con Safari) e tocca "Vedi sul tavolo".</p>
+        <button class="btn" id="reset" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          Rimetti in posa
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <span>Modello in scala reale: appoggiala sul tavolo e giraci intorno.</span>
+    <span><code>margherita.glb · 1,2 MB</code></span>
+  </footer>
+</div>
+
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<script>
+(() => {
+  const mv = document.getElementById('mv'), st = document.getElementById('state'), pr = document.getElementById('progress'), fb = document.getElementById('arfb');
+  mv.addEventListener('progress', e => { pr.style.width = (e.detail.totalProgress * 100) + '%'; if (e.detail.totalProgress >= 1) setTimeout(() => pr.style.opacity = 0, 400); });
+  mv.addEventListener('load', () => { st.textContent = 'IN TAVOLA'; if (!mv.canActivateAR) fb.hidden = false; });
+  mv.addEventListener('error', () => { st.textContent = 'FORNO SPENTO'; });
+  mv.addEventListener('ar-status', e => { st.textContent = e.detail.status === 'session-started' ? 'SUL TAVOLO' : e.detail.status === 'failed' ? 'AR NON RIUSCITA' : 'IN TAVOLA'; });
+  document.getElementById('reset').addEventListener('click', () => { mv.cameraOrbit = '25deg 62deg 0.7m'; mv.fieldOfView = '30deg'; mv.autoRotate = true; });
+})();
+</script>
+
+</body>
+</html>
