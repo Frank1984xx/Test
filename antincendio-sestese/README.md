@@ -8,8 +8,10 @@ Contenuti:
 - mappatura preliminare dei processi: dalla richiesta all'incasso, e formazione
 - ore perse a settimana, oggi e con la stima dopo l'intervento
 - 7 interventi, ciascuno con livello Artificiale / Bionico / Umano
+- roadmap probabile di 13 settimane (diagramma a barre)
 - percorso: mappatura, poi 30-60-90 giorni
-- impatto atteso, dati da chiedere al cliente, prossimi passi
+- animazioni: percorso dei giri nell'hero, contatori, barre e roadmap che si disegnano allo scorrimento
+- impatto atteso e invito all'incontro per decidere l'intervento, con i contatti di Francesco Scumace e Beppe Scotti
 
 ## File
 - `proposta.html` – la proposta (brand EthosInnova, icone SVG, tema chiaro e scuro)

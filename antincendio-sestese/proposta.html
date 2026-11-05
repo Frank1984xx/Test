@@ -2,397 +2,581 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: documento a colonna singola (max 980px), sezioni scandite da etichette, mappa processo come catena orizzontale scrollabile */
+/* Layout: banda hero scura a tutta larghezza con percorso animato dei giri, poi sezioni a colonna (max 1080px); roadmap come diagramma a barre sulle 13 settimane */
 :root{
-  --paper:#f4f7f6; --surface:#ffffff; --ink:#13201c; --muted:#56665f; --line:#d9e3df;
-  --accent:#1d6b57; --accent-soft:#e3f0eb; --signal:#c2412d; --signal-soft:#fbe9e5; --amber:#a86a12; --amber-soft:#f8eedc;
+  --bg:#f3f6f5; --surface:#ffffff; --ink:#0f1c18; --muted:#56665f; --line:#dbe4e0;
+  --accent:#16765c; --accent-2:#2fb387; --accent-soft:#e1f1ea;
+  --fire:#d9472f; --fire-soft:#fcebe6; --amber:#b5770f; --amber-soft:#f9efdb;
+  --night:#0c1714; --night-2:#13241f; --night-ink:#e9f2ee; --night-muted:#8fa69d; --night-line:#22372f;
   --f-display:"Archivo","Inter",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(15,28,24,.05),0 8px 24px -12px rgba(15,28,24,.18);
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0f1715; --surface:#16211e; --ink:#e6eeeb; --muted:#9aaba4; --line:#2a3833;
-  --accent:#5cc3a3; --accent-soft:#1a332c; --signal:#ff8a73; --signal-soft:#3a1f1a; --amber:#e3a94c; --amber-soft:#33281a; color-scheme:dark}}
+  --bg:#0b1411; --surface:#121f1b; --ink:#e7efec; --muted:#97aaa2; --line:#243630;
+  --accent:#4cc79d; --accent-2:#6fe0b8; --accent-soft:#16302a; --fire:#ff7a62; --fire-soft:#3a1e19; --amber:#e8ad4f; --amber-soft:#33281a;
+  --night:#07100d; --night-2:#0f1d19; --night-ink:#e9f2ee; --night-muted:#8fa69d; --night-line:#1d3029;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0f1715; --surface:#16211e; --ink:#e6eeeb; --muted:#9aaba4; --line:#2a3833;
-  --accent:#5cc3a3; --accent-soft:#1a332c; --signal:#ff8a73; --signal-soft:#3a1f1a; --amber:#e3a94c; --amber-soft:#33281a; color-scheme:dark}
+  --bg:#0b1411; --surface:#121f1b; --ink:#e7efec; --muted:#97aaa2; --line:#243630;
+  --accent:#4cc79d; --accent-2:#6fe0b8; --accent-soft:#16302a; --fire:#ff7a62; --fire-soft:#3a1e19; --amber:#e8ad4f; --amber-soft:#33281a;
+  --night:#07100d; --night-2:#0f1d19; --night-ink:#e9f2ee; --night-muted:#8fa69d; --night-line:#1d3029;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
-.wrap{max-width:980px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:56px}
-h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
-h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:800;letter-spacing:-.02em}
-h2{font-size:clamp(1.45rem,3vw,1.9rem);font-weight:700;letter-spacing:-.01em}
-h3{font-size:1.1rem;font-weight:700}
-p{margin:0;max-width:68ch}
-.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+.in-wrap{max-width:1080px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.08}
+h1{font-size:clamp(2.3rem,6vw,4.3rem);font-weight:850;font-stretch:112%;letter-spacing:-.025em}
+h2{font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:800;font-stretch:108%;letter-spacing:-.02em}
+h3{font-size:1.15rem;font-weight:750;font-stretch:104%}
+p{margin:0;max-width:66ch}
+.eyebrow{font-size:.74rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor;border-radius:2px}
 .muted{color:var(--muted)}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
-section{display:grid;gap:20px}
-.sec-head{display:grid;gap:8px}
 
-/* Header */
-.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:20px}
-.brand{display:flex;align-items:center;gap:10px;min-height:44px}
-.brand img{height:44px;width:auto}
-.wordmark{font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-.01em}
-.wordmark span{color:var(--accent)}
-.meta{font-size:.85rem;color:var(--muted);text-align:right}
-.hero{display:grid;gap:18px}
-.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:62ch}
+/* ---------- HERO ---------- */
+.hero{background:var(--night);color:var(--night-ink);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(closest-side,rgba(47,179,135,.22),transparent 70%);animation:glow 9s ease-in-out infinite alternate;pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--night-line) 1px,transparent 1px),linear-gradient(90deg,var(--night-line) 1px,transparent 1px);background-size:48px 48px;opacity:.35;mask-image:linear-gradient(180deg,#000 0%,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 85%);pointer-events:none}
+@keyframes glow{from{transform:translate(0,0) scale(1)}to{transform:translate(-8%,10%) scale(1.15)}}
+.hero .in-wrap{position:relative;z-index:1;padding-block:28px 64px;display:grid;gap:48px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-height:40px}
+.brand img{height:40px;width:auto;filter:brightness(0) invert(1)}
+.wordmark{font-family:var(--f-display);font-weight:850;font-stretch:112%;font-size:1.35rem;letter-spacing:-.01em;color:var(--night-ink)}
+.wordmark span{color:var(--accent-2)}
+.badge{font-size:.78rem;color:var(--night-muted);border:1px solid var(--night-line);padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.hero-text{display:grid;gap:22px;min-width:0}
+.hero .eyebrow{color:var(--accent-2)}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent-2),#9ff0d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:1.15rem;color:var(--night-muted);max-width:56ch}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;padding:12px 18px;border-radius:10px;text-decoration:none;transition:transform .2s,background .2s,border-color .2s}
+.btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+.btn.primary{background:var(--accent-2);color:#052219}
+.btn.primary:hover{transform:translateY(-2px)}
+.btn.ghost{border:1px solid var(--night-line);color:var(--night-ink)}
+.btn.ghost:hover{border-color:var(--accent-2)}
+.route{width:100%;max-width:440px;justify-self:center;aspect-ratio:1/1;max-height:420px}
+.route .path{fill:none;stroke:var(--accent-2);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:900;stroke-dashoffset:0;animation:draw 3.2s cubic-bezier(.6,.1,.2,1) .2s both}
+@keyframes draw{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+.route .ghost{fill:none;stroke:var(--night-line);stroke-width:1.5;stroke-dasharray:4 6}
+.route .stop{fill:var(--night);stroke:var(--accent-2);stroke-width:2.5}
+.route .stop.u{stroke:var(--fire)}
+.route .pulse{fill:none;stroke:var(--fire);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+.route .van{fill:var(--accent-2)}
+.route text{font-family:var(--f-mono);font-size:10px;fill:var(--night-muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--night-line);border:1px solid var(--night-line);border-radius:14px;overflow:hidden}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--night-2);padding:20px;display:grid;gap:6px;align-content:start}
+.stat b{font-family:var(--f-display);font-weight:850;font-stretch:112%;font-size:clamp(1.9rem,4vw,2.6rem);line-height:1;font-variant-numeric:tabular-nums;color:var(--night-ink)}
+.stat.hot b{color:#ff8a70}
+.stat small{color:var(--night-muted);font-size:.85rem;line-height:1.4}
 
-/* Numeri */
-.figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.fig{background:var(--surface);padding:18px 18px 16px;display:grid;gap:4px;align-content:start}
-.fig b{font-family:var(--f-display);font-size:2rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-.fig.alert b{color:var(--signal)}
-.fig small{color:var(--muted);font-size:.85rem;line-height:1.4}
+/* ---------- SEZIONI ---------- */
+main .in-wrap{display:grid;gap:96px;padding-block:80px 40px}
+section{display:grid;gap:28px}
+.sec-head{display:grid;gap:12px}
+
+/* reveal: visibile a riposo, anima solo ciò che entra scorrendo */
+.js .rv.pre{opacity:0;transform:translateY(26px)}
+.rv{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
 
 /* Fotografia */
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
-.kv{display:grid;grid-template-columns:1fr auto;gap:6px 16px;font-size:.95rem}
-.kv span:nth-child(even){font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
-.keep{display:flex;gap:12px;align-items:flex-start;background:var(--accent-soft);border-radius:10px;padding:16px 18px}
-.keep svg{flex:none;margin-top:2px;color:var(--accent)}
+.photo{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:12px;align-content:start;box-shadow:var(--shadow);min-width:0}
+.tile .ico{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 14px;font-size:.93rem}
+.kv span:nth-child(even){font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:600}
+.keep{display:flex;gap:16px;align-items:flex-start;background:linear-gradient(120deg,var(--accent-soft),transparent);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.keep svg{flex:none;color:var(--accent)}
 
-/* Mappa processo */
-.flow-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.flow{display:flex;gap:0;padding:20px;min-width:1040px;align-items:stretch}
-.step{flex:1;display:grid;grid-template-rows:auto auto 1fr;gap:6px;padding:0 10px;position:relative;font-size:.85rem}
-.step:not(:last-child)::after{content:"";position:absolute;right:-5px;top:11px;width:10px;height:10px;border-top:2px solid var(--muted);border-right:2px solid var(--muted);transform:rotate(45deg)}
-.step .dot{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-weight:700;font-size:.75rem}
-.step.pain .dot{background:var(--signal)}
-.step b{font-size:.9rem;line-height:1.3}
+/* Flusso */
+.flow-wrap{overflow-x:auto;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.flow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(118px,1fr);min-width:980px;padding:28px 22px 22px;position:relative}
+.flow.short{min-width:640px}
+.flow::before{content:"";position:absolute;left:44px;right:44px;top:43px;height:2px;background:var(--line)}
+.flow::after{content:"";position:absolute;left:44px;right:44px;top:43px;height:2px;background:linear-gradient(90deg,var(--accent),var(--fire));transform-origin:left;transform:scaleX(var(--p,1));transition:transform 1.6s cubic-bezier(.6,.1,.2,1)}
+.js .flow.pre::after{--p:0}
+.step{display:grid;gap:8px;justify-items:start;padding:0 8px;position:relative;z-index:1;font-size:.84rem}
+.step .dot{width:32px;height:32px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-weight:700;font-family:var(--f-mono);font-size:.8rem}
+.step.pain .dot{border-color:var(--fire);color:var(--surface);background:var(--fire);box-shadow:0 0 0 0 var(--fire);animation:ring 2.4s infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(217,71,47,.45)}70%{box-shadow:0 0 0 12px rgba(217,71,47,0)}100%{box-shadow:0 0 0 0 rgba(217,71,47,0)}}
+.step b{font-size:.92rem;line-height:1.25}
 .step em{font-style:normal;color:var(--muted);line-height:1.4}
-.step.pain em{color:var(--signal)}
+.step.pain em{color:var(--fire)}
+.flow-title{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 4px 4px}
 .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
 
 /* Ore */
-.bars{display:grid;gap:12px}
-.bar{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:12px;align-items:center}
-.bar .lab{font-size:.9rem;line-height:1.3}
-.bar .lab small{display:block;color:var(--muted)}
-.track{position:relative;height:28px;background:var(--paper);border-radius:4px}
-.fill{position:absolute;inset:0 auto 0 0;background:var(--signal);border-radius:4px}
-.after{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:4px}
-.track .num{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:.8rem;color:var(--ink)}
-.axis{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:12px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.hours{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:stretch}
+@media (max-width:860px){.hours{grid-template-columns:1fr}}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:grid;gap:16px;box-shadow:var(--shadow);min-width:0}
+.bar{display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:14px;align-items:center}
+.bar .lab{font-size:.9rem;line-height:1.25;font-weight:600}
+.bar .lab small{display:block;color:var(--muted);font-weight:400}
+.track{position:relative;height:34px;background:var(--bg);border-radius:8px;overflow:hidden}
+.track .now,.track .after{position:absolute;inset:0 auto 0 0;border-radius:8px;transform-origin:left;transition:transform 1.3s cubic-bezier(.6,.1,.2,1)}
+.track .now{background:repeating-linear-gradient(135deg,var(--fire-soft) 0 6px,transparent 6px 12px),var(--fire-soft);border:1.5px solid var(--fire)}
+.track .after{background:var(--accent);transition-delay:.5s}
+.js .chart.pre .now,.js .chart.pre .after{transform:scaleX(0)}
+.track .num{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:.8rem;font-weight:600}
+.axis{display:grid;grid-template-columns:minmax(130px,190px) 1fr;gap:14px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
 .axis div:last-child{display:flex;justify-content:space-between}
 @media (max-width:560px){.bar,.axis{grid-template-columns:1fr}.axis div:first-child{display:none}}
+.saved{background:var(--night);color:var(--night-ink);border-radius:14px;padding:28px;display:grid;gap:10px;align-content:center;position:relative;overflow:hidden}
+.saved::after{content:"";position:absolute;right:-60px;bottom:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(closest-side,rgba(47,179,135,.35),transparent)}
+.saved b{font-family:var(--f-display);font-weight:900;font-stretch:115%;font-size:4.2rem;line-height:.9;color:var(--accent-2);font-variant-numeric:tabular-nums}
+.saved span{color:var(--night-muted);font-size:.95rem}
+.saved strong{color:var(--night-ink)}
 
 /* Interventi */
-.cards{display:grid;gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px;display:grid;gap:14px}
-.card-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media (max-width:820px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;display:grid;gap:16px;grid-template-rows:auto auto 1fr auto;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card .n{position:absolute;right:18px;top:6px;font-family:var(--f-display);font-weight:900;font-stretch:115%;font-size:4.5rem;line-height:1;color:var(--line);pointer-events:none;transition:color .35s}
+.card:hover .n{color:var(--accent-soft)}
+.card .ico{width:46px;height:46px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;position:relative}
+.card h3{position:relative;padding-right:56px}
 .tags{display:flex;gap:6px;flex-wrap:wrap}
-.tag{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
-.tag.ai{border-color:var(--accent);color:var(--accent)}
-.tag.lean{border-color:var(--amber);color:var(--amber)}
-.tag.human{border-color:var(--ink);color:var(--ink)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.cols > div{display:grid;gap:6px;align-content:start;min-width:0}
-.cols h4{margin:0;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.cols ul{margin:0;padding-left:18px;display:grid;gap:4px}
-.gain{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem;border-top:1px dashed var(--line);padding-top:12px}
-.gain .mono{font-weight:500}
-.gain .from{color:var(--signal)}
-.gain .to{color:var(--accent)}
+.tag{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.tag.ai{background:var(--accent-soft);color:var(--accent)}
+.tag.lean{background:var(--amber-soft);color:var(--amber)}
+.tag.human{background:var(--fire-soft);color:var(--fire)}
+.pc{display:grid;gap:12px;font-size:.92rem}
+.pc .row{display:grid;grid-template-columns:72px 1fr;gap:12px}
+.pc .k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding-top:3px}
+.pc .k.o{color:var(--fire)}
+.pc .k.d{color:var(--accent)}
+.pc ul{margin:0;padding-left:16px;display:grid;gap:4px}
+.gain{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.88rem;border-top:1px dashed var(--line);padding-top:14px;color:var(--muted)}
+.gain .chip{font-family:var(--f-mono);font-weight:600;padding:3px 8px;border-radius:6px}
+.gain .chip.f{background:var(--fire-soft);color:var(--fire)}
+.gain .chip.t{background:var(--accent-soft);color:var(--accent)}
+.card.wide{grid-column:1/-1}
 
-/* Livelli */
-.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.level{border-top:3px solid var(--accent);background:var(--surface);border-radius:0 0 10px 10px;padding:18px;display:grid;gap:8px;align-content:start}
-.level.b{border-top-color:var(--amber)}
-.level.h{border-top-color:var(--ink)}
+/* Metodo */
+.method{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:820px){.method{grid-template-columns:1fr}}
+.lv{border-radius:16px;padding:26px;display:grid;gap:12px;align-content:start;border:1px solid var(--line);background:var(--surface);position:relative;overflow:hidden}
+.lv .meter{display:flex;gap:4px}
+.lv .meter i{height:6px;flex:1;border-radius:3px;background:var(--line)}
+.lv.a .meter i{background:var(--accent)}
+.lv.b .meter i:nth-child(-n+2){background:var(--amber)}
+.lv.h .meter i:first-child{background:var(--fire)}
+.lv small{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
 
-/* Percorso */
-.phases{display:grid;gap:0;border-left:2px solid var(--line);margin-left:8px}
-.phase{display:grid;gap:8px;padding:0 0 26px 24px;position:relative}
-.phase::before{content:"";position:absolute;left:-9px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--accent)}
-.phase .when{font-family:var(--f-mono);font-size:.8rem;color:var(--accent)}
-.phase ul{margin:0;padding-left:18px;display:grid;gap:4px}
+/* Roadmap */
+.road{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow-x:auto}
+.gantt{min-width:760px;padding:24px;display:grid;gap:10px}
+.g-row{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:center}
+.g-lab{font-size:.88rem;font-weight:600;line-height:1.25}
+.g-lab small{display:block;font-weight:400;color:var(--muted)}
+.g-track{position:relative;height:30px;display:grid;grid-template-columns:repeat(13,1fr);border-radius:6px;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/13 - 1px),var(--line) calc(100%/13 - 1px) calc(100%/13))}
+.g-bar{grid-row:1;height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:.72rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;transform-origin:left;transition:transform 1s cubic-bezier(.6,.1,.2,1)}
+.js .road.pre .g-bar{transform:scaleX(0)}
+.g-bar.m{background:var(--amber)}
+.g-bar.q{background:var(--accent)}
+.g-bar.c{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.g-bar.h{background:var(--fire)}
+.g-bar.ms{background:var(--ink);color:var(--bg)}
+.g-head{display:grid;grid-template-columns:230px 1fr;gap:16px;font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+.g-head .w{display:grid;grid-template-columns:repeat(13,1fr)}
+.g-head .w span{text-align:center}
+.g-phase{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-top:10px;border-top:1px solid var(--line);margin-top:4px}
+.g-phase:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.road-note{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.road-note div{display:grid;gap:4px;padding-left:14px;border-left:3px solid var(--accent)}
+.road-note div:nth-child(1){border-color:var(--amber)}
+.road-note div:nth-child(3){border-color:var(--ink)}
+.road-note b{font-family:var(--f-display);font-stretch:108%;font-size:1rem}
+.road-note span{font-size:.9rem;color:var(--muted)}
 
-/* Tabella */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
-th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}
-th{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
-td.n,th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
-tfoot td{font-weight:700;border-bottom:0}
+/* Incontro */
+.meet{background:var(--night);color:var(--night-ink);border-radius:22px;padding:clamp(26px,5vw,52px);display:grid;gap:30px;position:relative;overflow:hidden}
+.meet::before{content:"";position:absolute;left:-120px;top:-120px;width:420px;height:420px;background:radial-gradient(closest-side,rgba(47,179,135,.25),transparent 70%);animation:glow 10s ease-in-out infinite alternate}
+.meet > *{position:relative}
+.meet .eyebrow{color:var(--accent-2)}
+.meet p{color:var(--night-muted)}
+.agenda{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:760px){.agenda{grid-template-columns:1fr}}
+.agenda div{background:var(--night-2);border:1px solid var(--night-line);border-radius:12px;padding:16px;display:grid;gap:6px}
+.agenda .mono{color:var(--accent-2);font-size:.78rem}
+.agenda b{font-size:.98rem}
+.agenda span{font-size:.88rem;color:var(--night-muted)}
+.people{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:640px){.people{grid-template-columns:1fr}}
+.person{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--night-line);border-radius:14px;padding:16px;min-width:0}
+.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-family:var(--f-display);font-weight:800;color:#052219;font-size:1.05rem}
+.person b{display:block;font-size:1.02rem}
+.person .role{font-size:.82rem;color:var(--night-muted);display:block;margin-bottom:6px}
+.person .ln{display:flex;gap:8px;align-items:center;font-size:.86rem;color:var(--night-ink);user-select:all;overflow-wrap:anywhere}
+.person .ln svg{flex:none;color:var(--accent-2)}
+footer{max-width:1080px;margin:0 auto;padding-block:26px 40px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line)}
 
-.list{margin:0;padding-left:20px;display:grid;gap:8px;max-width:70ch}
-.cta{background:var(--ink);color:var(--paper);border-radius:12px;padding:28px;display:grid;gap:14px}
-.cta h2{color:var(--paper)}
-.cta .contacts{display:flex;gap:10px 28px;flex-wrap:wrap;font-size:.95rem}
-.cta .contacts span{display:flex;gap:8px;align-items:center;user-select:all}
-footer{border-top:1px solid var(--line);padding-top:18px;font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv.pre{opacity:1;transform:none}
+  .js .chart.pre .now,.js .chart.pre .after,.js .road.pre .g-bar{transform:none}
+  .js .flow.pre::after{--p:1}
+}
 </style>
 
-<div class="wrap">
-
-  <header class="top">
-    <div class="brand">
-      <img src="https://lh3.googleusercontent.com/d/1U_BahKYxXyJJrNbtDb_ejApl0S0D7_yS" alt="EthosInnova" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
-      <div class="wordmark" hidden>Ethos<span>Innova</span></div>
+<header class="hero">
+  <div class="in-wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="https://lh3.googleusercontent.com/d/1U_BahKYxXyJJrNbtDb_ejApl0S0D7_yS" alt="EthosInnova" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <div class="wordmark" hidden>Ethos<span>Innova</span></div>
+      </div>
+      <span class="badge">Proposta riservata · 5 novembre 2026</span>
     </div>
-    <div class="meta">Proposta di intervento<br>5 novembre 2026</div>
-  </header>
 
-  <section class="hero">
-    <div class="eyebrow">Per Daniele Nuvoli · Antincendio Sestese</div>
-    <h1>Più giri, preventivi e corsi con la stessa squadra</h1>
-    <p class="lead">Abbiamo letto le 65 risposte del questionario. Il quadro è chiaro: l'azienda ha volumi importanti e un gestionale nuovo, ma cinque attività manuali assorbono la segreteria. Qui trovi dove interverremmo con il nostro metodo Lean, AI e Human, in che ordine e con quale risultato atteso.</p>
-  </section>
-
-  <section>
-    <div class="figures">
-      <div class="fig alert"><b>110 h</b><small>a settimana spese in 5 attività manuali, quasi tutte in segreteria (circa 2,7 persone a tempo pieno)</small></div>
-      <div class="fig alert"><b>1.000</b><small>preventivi al mese, che quasi mai vengono richiamati se non accettati</small></div>
-      <div class="fig"><b>500</b><small>interventi tecnici al mese, organizzati con telefono e WhatsApp</small></div>
-      <div class="fig"><b>200</b><small>corsi all'anno, gestiti a mano dall'iscrizione all'attestato</small></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Fotografia dell'azienda</div>
-      <h2>Cosa abbiamo capito</h2>
-    </div>
-    <div class="two">
-      <div class="panel">
-        <h3>Le persone</h3>
-        <div class="kv">
-          <span>Direzione</span><span>2</span>
-          <span>Ufficio e amministrazione</span><span>2</span>
-          <span>Commerciale</span><span>1</span>
-          <span>Tecnici sul campo</span><span>7</span>
-          <span>Magazzino e logistica</span><span>1</span>
-          <span>Formazione</span><span>1</span>
-          <span>Collaboratori esterni</span><span>5</span>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="eyebrow">Per Daniele Nuvoli · Antincendio Sestese</div>
+        <h1>Stessa squadra, <em>più giri, più preventivi chiusi</em></h1>
+        <p class="lead">Abbiamo studiato le vostre 65 risposte. Qui trovi cosa abbiamo visto, dove interverremmo con Lean, AI e persone e una roadmap probabile di 90 giorni. Ne parliamo insieme e decidiamo se partire.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#incontro">Fissiamo l'incontro
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghost" href="#roadmap">Vedi la roadmap</a>
         </div>
       </div>
-      <div class="panel">
-        <h3>I volumi</h3>
-        <div class="kv">
-          <span>Clienti attivi</span><span>2.600</span>
-          <span>Presidi in gestione</span><span>300.000</span>
-          <span>Interventi al mese</span><span>500</span>
-          <span>Preventivi al mese</span><span>1.000</span>
-          <span>Corsi all'anno</span><span>200</span>
-          <span>Pratiche SCIA e CPI all'anno</span><span>20</span>
+
+      <svg class="route" viewBox="0 0 400 400" role="img" aria-label="Giro di manutenzione ottimizzato tra i presidi">
+        <path class="ghost" d="M60 330 L300 80 L110 120 L340 300 L70 210 L250 350 L330 170"/>
+        <path class="path" d="M60 330 C90 290 70 250 110 220 S170 200 160 150 S200 70 250 90 S340 120 320 180 S300 260 340 300 S280 350 220 330"/>
+        <g>
+          <circle class="stop" cx="60" cy="330" r="7"/><circle class="stop" cx="110" cy="220" r="7"/>
+          <circle class="stop" cx="160" cy="150" r="7"/><circle class="stop" cx="250" cy="90" r="7"/>
+          <circle class="stop" cx="320" cy="180" r="7"/><circle class="stop" cx="340" cy="300" r="7"/>
+          <circle class="stop" cx="220" cy="330" r="7"/>
+          <circle class="pulse" cx="230" cy="230" r="7"/><circle class="stop u" cx="230" cy="230" r="7"/>
+        </g>
+        <circle class="van" r="6">
+          <animateMotion dur="7s" repeatCount="indefinite" begin="3.4s" path="M60 330 C90 290 70 250 110 220 S170 200 160 150 S200 70 250 90 S340 120 320 180 S300 260 340 300 S280 350 220 330"/>
+        </circle>
+        <text x="74" y="350">PARTENZA</text>
+        <text x="244" y="226">URGENZA</text>
+        <text x="262" y="78">SCADENZA 11/26</text>
+      </svg>
+    </div>
+
+    <div class="stats">
+      <div class="stat hot"><b data-count="110">110</b><small>ore a settimana in 5 attività manuali, quasi tutte in segreteria</small></div>
+      <div class="stat hot"><b data-count="1000" data-sep="1">1.000</b><small>preventivi al mese, quasi mai richiamati</small></div>
+      <div class="stat"><b data-count="500">500</b><small>interventi al mese organizzati tra telefono e WhatsApp</small></div>
+      <div class="stat"><b data-count="300000" data-sep="1">300.000</b><small>presidi in gestione su 2.600 clienti attivi</small></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="in-wrap">
+
+    <section>
+      <div class="sec-head rv">
+        <div class="eyebrow">Fotografia dell'azienda</div>
+        <h2>Cosa abbiamo capito di voi</h2>
+      </div>
+      <div class="photo">
+        <div class="tile rv">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.6c3 0 5.5 1.6 5.5 4.4"/></svg></span>
+          <h3>Le persone</h3>
+          <div class="kv"><span>Direzione</span><span>2</span><span>Ufficio e amministrazione</span><span>2</span><span>Commerciale</span><span>1</span><span>Tecnici sul campo</span><span>7</span><span>Magazzino</span><span>1</span><span>Formazione</span><span>1</span><span>Collaboratori esterni</span><span>5</span></div>
+        </div>
+        <div class="tile rv d1">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></svg></span>
+          <h3>I volumi</h3>
+          <div class="kv"><span>Clienti attivi</span><span>2.600</span><span>Presidi in gestione</span><span>300.000</span><span>Interventi al mese</span><span>500</span><span>Preventivi al mese</span><span>1.000</span><span>Corsi all'anno</span><span>200</span><span>Pratiche SCIA e CPI all'anno</span><span>20</span></div>
+        </div>
+        <div class="tile rv d2">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-5.5 1-8.5z"/></svg></span>
+          <h3>Il business</h3>
+          <p>Manutenzione periodica, vendita presidi, sicurezza D.Lgs. 81/08 e formazione. L'obiettivo dei prossimi due anni: più clienti e più automazione, senza assumere.</p>
+          <p class="muted">Le richieste arrivano da telefono, mail, sito, passaparola e amministratori di condominio.</p>
+        </div>
+        <div class="tile rv d3">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+          <h3>Gli strumenti</h3>
+          <p>Artax (gestionale su misura), software manutenzioni, app dei tecnici, WhatsApp e calendario condiviso. In azienda usate già ChatGPT, Gemini e Claude.</p>
         </div>
       </div>
-      <div class="panel">
-        <h3>Il business</h3>
-        <p>Il fatturato arriva da manutenzione periodica, vendita presidi, sicurezza D.Lgs. 81/08 e formazione. Nei prossimi due anni volete più clienti e più automazione, senza assumere.</p>
-        <p class="muted">Le richieste arrivano da telefono, email, form del sito, passaparola e amministratori di condominio.</p>
+      <div class="keep rv">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <p><strong>Artax resta al centro.</strong> È appena installato e già gestisce scadenze, magazzino, noleggi e fatturazione. Non lo sostituiamo: costruiamo intorno ai suoi dati gli strumenti che oggi mancano.</p>
       </div>
-      <div class="panel">
-        <h3>Gli strumenti</h3>
-        <p>Artax (gestionale costruito su misura), software manutenzioni, app dei tecnici, WhatsApp, calendario condiviso. In azienda usate già ChatGPT, Gemini e Claude per lettere, relazioni e informazioni tecniche.</p>
+    </section>
+
+    <section>
+      <div class="sec-head rv">
+        <div class="eyebrow">Mappatura preliminare</div>
+        <h2>Il processo oggi, dalla richiesta all'incasso</h2>
+        <p class="muted">Ricostruito dalle vostre risposte. Nella prima fase lo verifichiamo insieme in azienda.</p>
       </div>
-    </div>
-    <div class="keep">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      <p><strong>Artax resta al centro.</strong> È appena installato e funziona per scadenze, magazzino, noleggi e fatturazione. Non lo sostituiamo: costruiamo intorno ad Artax gli strumenti che oggi mancano e li colleghiamo ai suoi dati.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Mappatura preliminare</div>
-      <h2>Il processo oggi, dalla richiesta all'incasso</h2>
-      <p class="muted">Ricostruito dalle risposte. Lo verifichiamo e lo completiamo insieme in azienda nella prima fase.</p>
-    </div>
-    <div class="flow-wrap">
-      <div class="flow">
-        <div class="step"><span class="dot">1</span><b>Richiesta</b><em>Telefono, mail, sito, amministratori</em></div>
-        <div class="step"><span class="dot">2</span><b>Sopralluogo</b><em>Il tecnico manda le note via mail</em></div>
-        <div class="step pain"><span class="dot">3</span><b>Preventivo</b><em>L'ufficio elabora e attende i fornitori: da 1 a 7 giorni</em></div>
-        <div class="step pain"><span class="dot">4</span><b>Attesa risposta</b><em>Nessun richiamo dei preventivi aperti</em></div>
-        <div class="step pain"><span class="dot">5</span><b>Pianificazione giri</b><em>Fatta per l'80% a mano, 6 ore al giorno, urgenze tolte ai programmati</em></div>
-        <div class="step"><span class="dot">6</span><b>Intervento</b><em>Registrato su app o tablet</em></div>
-        <div class="step pain"><span class="dot">7</span><b>Verifica e fattura</b><em>L'ufficio controlla e riporta in Artax: 30 ore a settimana</em></div>
-        <div class="step pain"><span class="dot">8</span><b>Incasso</b><em>Solleciti fatti a mano</em></div>
+      <div class="flow-wrap rv">
+        <div class="flow" data-anim>
+          <div class="step"><span class="dot">1</span><b>Richiesta</b><em>Telefono, mail, sito, amministratori</em></div>
+          <div class="step"><span class="dot">2</span><b>Sopralluogo</b><em>Il tecnico manda le note via mail</em></div>
+          <div class="step pain"><span class="dot">3</span><b>Preventivo</b><em>Elaborazione e attesa fornitori: da 1 a 7 giorni</em></div>
+          <div class="step pain"><span class="dot">4</span><b>Attesa risposta</b><em>Preventivi aperti quasi mai richiamati</em></div>
+          <div class="step pain"><span class="dot">5</span><b>Giri</b><em>Pianificati a mano, 6 ore al giorno; le urgenze rompono il programma</em></div>
+          <div class="step"><span class="dot">6</span><b>Intervento</b><em>Registrato su app o tablet</em></div>
+          <div class="step pain"><span class="dot">7</span><b>Verifica e fattura</b><em>Controllo e riporto in Artax: 30 ore a settimana</em></div>
+          <div class="step pain"><span class="dot">8</span><b>Incasso</b><em>Solleciti fatti a mano</em></div>
+        </div>
       </div>
-    </div>
-    <div class="flow-wrap">
-      <div class="flow" style="min-width:820px">
-        <div class="step"><span class="dot">1</span><b>Iscrizione</b><em>Raccolta a mano</em></div>
-        <div class="step pain"><span class="dot">2</span><b>Organizzazione corso</b><em>Aule, docenti e partecipanti a mano</em></div>
-        <div class="step"><span class="dot">3</span><b>Erogazione</b><em>Registro presenze</em></div>
-        <div class="step pain"><span class="dot">4</span><b>Attestati</b><em>Compilati uno per uno</em></div>
-        <div class="step pain"><span class="dot">5</span><b>Scadenza aggiornamento</b><em>Avvisi a mano: qui capitano le dimenticanze</em></div>
+      <div class="flow-wrap rv">
+        <div class="flow short" data-anim>
+          <div class="step"><span class="dot">1</span><b>Iscrizione</b><em>Raccolta a mano</em></div>
+          <div class="step pain"><span class="dot">2</span><b>Organizzazione</b><em>Aule, docenti e partecipanti a mano</em></div>
+          <div class="step"><span class="dot">3</span><b>Corso</b><em>Registro presenze</em></div>
+          <div class="step pain"><span class="dot">4</span><b>Attestati</b><em>Compilati uno per uno</em></div>
+          <div class="step pain"><span class="dot">5</span><b>Scadenza</b><em>Avvisi a mano: qui si perdono i rinnovi</em></div>
+        </div>
       </div>
-    </div>
-    <div class="legend"><span><i style="background:var(--accent)"></i>Passaggio che funziona</span><span><i style="background:var(--signal)"></i>Punto critico emerso dal questionario</span></div>
-  </section>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Passaggio che funziona</span><span><i style="background:var(--fire)"></i>Punto critico</span></div>
+    </section>
 
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Dove si perde tempo</div>
-      <h2>Ore a settimana: oggi e dopo l'intervento</h2>
-      <p class="muted">Ore dichiarate nel questionario. Le stime dopo l'intervento sono prudenziali e le confermiamo con i rilievi della mappatura.</p>
-    </div>
-    <div class="bars">
-      <div class="bar"><div class="lab">Fatturazione<small>Segreteria</small></div><div class="track"><div class="fill" style="width:100%"></div><div class="after" style="width:40%"></div><span class="num">30 → 12</span></div></div>
-      <div class="bar"><div class="lab">Preventivazione<small>Segreteria</small></div><div class="track"><div class="fill" style="width:100%"></div><div class="after" style="width:50%"></div><span class="num">30 → 15</span></div></div>
-      <div class="bar"><div class="lab">Organizzazione giri<small>Segreteria e resp. tecnico</small></div><div class="track"><div class="fill" style="width:66.7%"></div><div class="after" style="width:23.3%"></div><span class="num">20 → 7</span></div></div>
-      <div class="bar"><div class="lab">Corsi e attestati<small>Segreteria</small></div><div class="track"><div class="fill" style="width:66.7%"></div><div class="after" style="width:20%"></div><span class="num">20 → 6</span></div></div>
-      <div class="bar"><div class="lab">Recupero crediti<small>Segreteria</small></div><div class="track"><div class="fill" style="width:33.3%"></div><div class="after" style="width:10%"></div><span class="num">10 → 3</span></div></div>
-      <div class="axis"><div></div><div><span>0</span><span>10</span><span>20</span><span>30 h</span></div></div>
-    </div>
-    <div class="legend"><span><i style="background:var(--signal)"></i>Oggi</span><span><i style="background:var(--accent)"></i>Stima dopo l'intervento</span></div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Gli interventi</div>
-      <h2>Cosa facciamo, area per area</h2>
-      <p class="muted">In ordine di priorità: prima le attività che volete far sparire e quelle dove capitano più errori.</p>
-    </div>
-    <div class="cards">
-
-      <article class="card">
-        <div class="card-head"><h3>Pianificazione automatica dei giri di manutenzione</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Bionico</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Giri organizzati per l'80% dall'operatore, 6 ore al giorno al telefono e su WhatsApp</li><li>Le urgenze tolgono tecnici ai controlli programmati</li><li>È il punto con più errori</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Leggiamo le scadenze da Artax e raggruppiamo i presidi per zona, finestra di scadenza e competenze del tecnico</li><li>L'AI propone il piano settimanale; il responsabile tecnico lo rivede e lo approva</li><li>Riserviamo ogni giorno una quota di capacità per le urgenze, così il programma non salta</li><li>Avviso automatico al cliente con data e fascia oraria, con conferma o spostamento via messaggio</li></ul></div>
+    <section>
+      <div class="sec-head rv">
+        <div class="eyebrow">Dove si perde tempo</div>
+        <h2>Ore a settimana, oggi e dopo</h2>
+        <p class="muted">Ore indicate nel questionario e nostra stima prudenziale dopo l'intervento.</p>
+      </div>
+      <div class="hours">
+        <div class="chart rv" data-anim>
+          <div class="bar"><div class="lab">Fatturazione<small>Segreteria</small></div><div class="track"><div class="now" style="width:100%"></div><div class="after" style="width:40%"></div><span class="num">30 → 12</span></div></div>
+          <div class="bar"><div class="lab">Preventivi<small>Segreteria</small></div><div class="track"><div class="now" style="width:100%"></div><div class="after" style="width:50%"></div><span class="num">30 → 15</span></div></div>
+          <div class="bar"><div class="lab">Giri manutenzione<small>Segreteria e resp. tecnico</small></div><div class="track"><div class="now" style="width:66.7%"></div><div class="after" style="width:23.3%"></div><span class="num">20 → 7</span></div></div>
+          <div class="bar"><div class="lab">Corsi e attestati<small>Segreteria</small></div><div class="track"><div class="now" style="width:66.7%"></div><div class="after" style="width:20%"></div><span class="num">20 → 6</span></div></div>
+          <div class="bar"><div class="lab">Recupero crediti<small>Segreteria</small></div><div class="track"><div class="now" style="width:33.3%"></div><div class="after" style="width:10%"></div><span class="num">10 → 3</span></div></div>
+          <div class="axis"><div></div><div><span>0</span><span>10</span><span>20</span><span>30 h</span></div></div>
+          <div class="legend"><span><i style="background:var(--fire)"></i>Oggi</span><span><i style="background:var(--accent)"></i>Dopo l'intervento (stima)</span></div>
         </div>
-        <div class="gain">Stima: <span class="mono from">20 h</span> → <span class="mono to">7 h</span> a settimana, meno chiamate e meno appuntamenti mancati</div>
-      </article>
-
-      <article class="card">
-        <div class="card-head"><h3>Dal rapportino alla fattura senza ricopiare</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Il tecnico registra su app, poi l'ufficio verifica ogni intervento e lo trasferisce in fatturazione</li><li>30 ore a settimana di segreteria</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Un controllo automatico confronta ogni rapportino con contratto, listino e materiali usati</li><li>Gli interventi in regola passano in fatturazione in blocco su Artax</li><li>La segreteria vede solo le eccezioni: dati mancanti, prezzi fuori listino, materiali non previsti</li></ul></div>
+        <div class="saved rv d1">
+          <span>Tempo che torna disponibile</span>
+          <b data-count="67">67</b>
+          <span><strong>ore a settimana</strong>, più di una persona e mezza, da spostare su clienti e crescita.</span>
+          <span>In più c'è il fatturato che oggi si perde tra preventivi non richiamati e corsi non rinnovati.</span>
         </div>
-        <div class="gain">Stima: <span class="mono from">30 h</span> → <span class="mono to">12 h</span> a settimana, fatture emesse prima</div>
-      </article>
+      </div>
+    </section>
 
-      <article class="card">
-        <div class="card-head"><h3>Preventivi più veloci e richiamati</h3><div class="tags"><span class="tag ai">AI</span><span class="tag lean">Lean</span><span class="tag">Bionico</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Sopralluogo, mail del tecnico, elaborazione in ufficio, attesa del fornitore: da 1 a 7 giorni</li><li>1.000 preventivi al mese e quasi nessun richiamo</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Voci standard e listino unico per le lavorazioni ricorrenti</li><li>L'AI trasforma le note del sopralluogo (anche vocali o foto) in una bozza di preventivo pronta da controllare</li><li>Richiesta prezzi ai fornitori con un modulo standard e promemoria automatico</li><li>Richiamo automatico a 7 e 15 giorni per i preventivi aperti, con elenco delle trattative calde per il commerciale</li></ul></div>
+    <section>
+      <div class="sec-head rv">
+        <div class="eyebrow">Gli interventi</div>
+        <h2>Dove mettiamo le mani</h2>
+        <p class="muted">In ordine di priorità: prima le attività che vorreste far sparire e quelle dove capitano più errori.</p>
+      </div>
+      <div class="cards">
+        <article class="card rv">
+          <span class="n">01</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></svg></span>
+          <h3>Giri di manutenzione pianificati dall'AI</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>Giri fatti per l'80% a mano, 6 ore al giorno tra telefono e WhatsApp</li><li>Le urgenze tolgono tecnici ai controlli programmati</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Le scadenze di Artax diventano un piano settimanale per zona e competenze; il responsabile tecnico lo approva</li><li>Una quota di capacità al giorno riservata alle urgenze</li><li>Conferma dell'appuntamento al cliente via messaggio, in automatico</li></ul></div>
+          </div>
+          <div class="gain"><span class="chip f">20 h</span>→<span class="chip t">7 h</span>a settimana<div class="tags" style="margin-left:auto"><span class="tag lean">Lean</span><span class="tag ai">AI</span></div></div>
+        </article>
+
+        <article class="card rv d1">
+          <span class="n">02</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+          <h3>Dal rapportino alla fattura senza ricopiare</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>L'ufficio verifica ogni intervento e lo riporta in fatturazione</li><li>30 ore a settimana di segreteria</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Controllo automatico di ogni rapportino su contratto, listino e materiali</li><li>Gli interventi in regola vanno in fattura in blocco su Artax</li><li>La segreteria vede solo le eccezioni</li></ul></div>
+          </div>
+          <div class="gain"><span class="chip f">30 h</span>→<span class="chip t">12 h</span>a settimana<div class="tags" style="margin-left:auto"><span class="tag lean">Lean</span><span class="tag ai">AI</span></div></div>
+        </article>
+
+        <article class="card rv">
+          <span class="n">03</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></span>
+          <h3>Preventivi più rapidi, e richiamati</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>Da 1 a 7 giorni tra sopralluogo, mail, elaborazione e fornitori</li><li>1.000 preventivi al mese, quasi nessun richiamo</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>L'AI trasforma le note del sopralluogo (anche vocali o foto) in una bozza pronta da controllare</li><li>Listino unico e richiesta prezzi standard ai fornitori</li><li>Richiamo automatico a 7 e 15 giorni e lista delle trattative calde</li></ul></div>
+          </div>
+          <div class="gain"><span class="chip f">30 h</span>→<span class="chip t">15 h</span>e più preventivi chiusi<div class="tags" style="margin-left:auto"><span class="tag ai">AI</span><span class="tag lean">Lean</span></div></div>
+        </article>
+
+        <article class="card rv d1">
+          <span class="n">04</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></span>
+          <h3>Formazione in automatico, dall'iscrizione al rinnovo</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>Tutto a mano, dall'iscrizione all'attestato</li><li>Gli avvisi di scadenza a volte si perdono</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Iscrizione online e registro presenze digitale</li><li>Attestati generati in automatico</li><li>Avviso di scadenza 81/08 al cliente con la proposta della prossima data</li></ul></div>
+          </div>
+          <div class="gain"><span class="chip f">20 h</span>→<span class="chip t">6 h</span>e nessun rinnovo perso<div class="tags" style="margin-left:auto"><span class="tag ai">AI</span></div></div>
+        </article>
+
+        <article class="card rv">
+          <span class="n">05</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
+          <h3>Solleciti di pagamento che partono da soli</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>Solleciti a mano, 10 ore a settimana</li><li>L'altra attività che vorreste far sparire</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Sequenza automatica: promemoria cortese, secondo avviso, sollecito formale</li><li>La telefonata resta alla persona, solo per i casi difficili</li><li>Vista unica dello scaduto per cliente</li></ul></div>
+          </div>
+          <div class="gain"><span class="chip f">10 h</span>→<span class="chip t">3 h</span>e incassi più regolari<div class="tags" style="margin-left:auto"><span class="tag ai">AI</span><span class="tag human">Human</span></div></div>
+        </article>
+
+        <article class="card rv d1">
+          <span class="n">06</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><circle cx="14" cy="14" r="2.5"/><path d="m16 16 2 2"/></svg></span>
+          <h3>Fascicolo cliente unico e numeri ogni mattina</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>Documenti tra mail, carta, database e professionisti esterni</li><li>Un'ora per avere fatturato, previsioni e pagamenti</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Un fascicolo digitale per cliente, con ricerca a parole ("ultimo CPI del condominio di via...")</li><li>Scadenze SCIA e CPI con promemoria</li><li>Un riepilogo automatico ogni mattina con i numeri chiave</li></ul></div>
+          </div>
+          <div class="gain">Documenti in pochi secondi, numeri senza estrazioni<div class="tags" style="margin-left:auto"><span class="tag lean">Lean</span><span class="tag ai">AI</span></div></div>
+        </article>
+
+        <article class="card wide rv">
+          <span class="n">07</span>
+          <span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+          <h3>Le persone: formazione e un nuovo modo di lavorare</h3>
+          <div class="pc">
+            <div class="row"><span class="k o">Oggi</span><ul><li>ChatGPT, Gemini e Claude già in uso, ognuno a modo suo</li><li>Norme trasmesse ai tecnici con corsi e riunioni</li></ul></div>
+            <div class="row"><span class="k d">Domani</span><ul><li>Percorso Ethos Lab AI per ufficio e direzione: uso sicuro dell'AI, prompt aziendali, regole sui dati dei clienti</li><li>Procedure standard scritte insieme a tecnici e segreteria</li><li>Un assistente che risponde ai tecnici su norme e procedure interne</li></ul></div>
+          </div>
+          <div class="gain">Gli strumenti funzionano solo se la squadra li adotta: coinvolgiamo le persone dal primo giorno<div class="tags" style="margin-left:auto"><span class="tag human">Human</span><span class="tag lean">Lean</span></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head rv">
+        <div class="eyebrow">Il metodo</div>
+        <h2>Macchina, persona o tutte e due</h2>
+        <p class="muted">Per ogni attività scegliamo il livello giusto. Liberiamo tempo dove serve e lasciamo alle persone decisioni e relazioni.</p>
+      </div>
+      <div class="method">
+        <div class="lv a rv"><div class="meter"><i></i><i></i><i></i></div><small>Artificiale</small><h3>Il sistema lavora, la persona controlla</h3><p class="muted">Attestati, solleciti, fatture degli interventi in regola.</p></div>
+        <div class="lv b rv d1"><div class="meter"><i></i><i></i><i></i></div><small>Bionico</small><h3>L'AI prepara, la persona decide</h3><p class="muted">Piano dei giri, bozza del preventivo, priorità dei crediti.</p></div>
+        <div class="lv h rv d2"><div class="meter"><i></i><i></i><i></i></div><small>Umano</small><h3>Resta alla persona, con dati migliori</h3><p class="muted">Trattativa, telefonata al cliente in ritardo, gestione dei tecnici.</p></div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="sec-head rv">
+        <div class="eyebrow">Roadmap probabile</div>
+        <h2>I primi 90 giorni, settimana per settimana</h2>
+        <p class="muted">Una prima ipotesi. Tempi e priorità li concordiamo all'incontro e li confermiamo dopo la mappatura.</p>
+      </div>
+      <div class="road rv" data-anim>
+        <div class="gantt">
+          <div class="g-head"><div></div><div class="w"><span>S1</span><span>S2</span><span>S3</span><span>S4</span><span>S5</span><span>S6</span><span>S7</span><span>S8</span><span>S9</span><span>S10</span><span>S11</span><span>S12</span><span>S13</span></div></div>
+          <div class="g-phase">Mappatura</div>
+          <div class="g-row"><div class="g-lab">Mappatura in azienda<small>Interviste, flusso del valore, caccia agli sprechi</small></div><div class="g-track"><div class="g-bar m" style="grid-column:1/4">Lean</div></div></div>
+          <div class="g-row"><div class="g-lab">Piano condiviso<small>Priorità e obiettivi confermati</small></div><div class="g-track"><div class="g-bar ms" style="grid-column:3/4">OK</div></div></div>
+          <div class="g-phase">Risultati rapidi · giorni 1-30</div>
+          <div class="g-row"><div class="g-lab">Solleciti automatici</div><div class="g-track"><div class="g-bar q" style="grid-column:4/6">AI</div></div></div>
+          <div class="g-row"><div class="g-lab">Richiamo preventivi aperti</div><div class="g-track"><div class="g-bar q" style="grid-column:4/7">AI</div></div></div>
+          <div class="g-row"><div class="g-lab">Formazione e attestati</div><div class="g-track"><div class="g-bar q" style="grid-column:5/8">AI</div></div></div>
+          <div class="g-phase">Cuore operativo · giorni 30-60</div>
+          <div class="g-row"><div class="g-lab">Pianificazione giri</div><div class="g-track"><div class="g-bar c" style="grid-column:6/11">Lean + AI</div></div></div>
+          <div class="g-row"><div class="g-lab">Rapportino → fattura</div><div class="g-track"><div class="g-bar c" style="grid-column:7/11">Lean + AI</div></div></div>
+          <div class="g-row"><div class="g-lab">Bozze preventivo con AI</div><div class="g-track"><div class="g-bar c" style="grid-column:8/12">AI</div></div></div>
+          <div class="g-phase">Consolidamento · giorni 60-90</div>
+          <div class="g-row"><div class="g-lab">Fascicolo cliente e numeri</div><div class="g-track"><div class="g-bar q" style="grid-column:10/14">AI</div></div></div>
+          <div class="g-row"><div class="g-lab">Ethos Lab AI per la squadra</div><div class="g-track"><div class="g-bar h" style="grid-column:4/14">Human · accompagnamento continuo</div></div></div>
+          <div class="g-row"><div class="g-lab">Verifica risultati</div><div class="g-track"><div class="g-bar ms" style="grid-column:13/14">KPI</div></div></div>
         </div>
-        <div class="gain">Stima: <span class="mono from">30 h</span> → <span class="mono to">15 h</span> a settimana, più preventivi chiusi a parità di richieste</div>
-      </article>
+      </div>
+      <div class="road-note">
+        <div class="rv"><b>Settimane 1-3</b><span>Conosciamo i processi dal vivo e fissiamo insieme gli obiettivi.</span></div>
+        <div class="rv d1"><b>Settimane 4-10</b><span>Prima i risultati rapidi, poi giri, fatturazione e preventivi.</span></div>
+        <div class="rv d2"><b>Settimane 10-13</b><span>Consolidiamo e misuriamo i risultati rispetto al punto di partenza.</span></div>
+      </div>
+    </section>
 
-      <article class="card">
-        <div class="card-head"><h3>Formazione: iscrizioni, attestati e scadenze in automatico</h3><div class="tags"><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Dall'iscrizione all'attestato è tutto a mano</li><li>Gli avvisi di scadenza dei corsi partono a mano e qualcuno si perde</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Iscrizione online con dati del partecipante e dell'azienda</li><li>Registro presenze digitale e attestati generati in automatico dal modello</li><li>Scadenziario degli aggiornamenti 81/08 con avviso automatico al cliente e proposta della prossima data</li></ul></div>
+    <section id="incontro">
+      <div class="meet rv">
+        <div class="sec-head">
+          <div class="eyebrow">Prossimo passo</div>
+          <h2>Ci vediamo e decidiamo insieme</h2>
+          <p>Un'ora, da voi o da noi. Ti presentiamo l'analisi e la roadmap, ascoltiamo cosa ne pensate e decidiamo se e come partire. La consulenza iniziale è gratuita.</p>
         </div>
-        <div class="gain">Stima: <span class="mono from">20 h</span> → <span class="mono to">6 h</span> a settimana. Ogni scadenza non persa è un corso venduto</div>
-      </article>
-
-      <article class="card">
-        <div class="card-head"><h3>Solleciti di pagamento automatici</h3><div class="tags"><span class="tag ai">AI</span><span class="tag human">Human</span><span class="tag">Bionico</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Solleciti fatti a mano, 10 ore a settimana</li><li>È una delle due attività che vorreste far sparire</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Lo scadenziario di Artax attiva una sequenza di avvisi: promemoria cortese, secondo avviso, sollecito formale</li><li>La telefonata resta alla persona, solo per i casi che non si sbloccano</li><li>Una vista unica dello scaduto per cliente e per anzianità</li></ul></div>
+        <div class="agenda">
+          <div><span class="mono">15 min</span><b>Cosa abbiamo visto</b><span>Analisi, mappa del processo e ore perse</span></div>
+          <div><span class="mono">25 min</span><b>Dove interveniamo</b><span>Interventi, priorità e roadmap probabile</span></div>
+          <div><span class="mono">20 min</span><b>Decidiamo</b><span>Se partire, da dove e con quali tempi</span></div>
         </div>
-        <div class="gain">Stima: <span class="mono from">10 h</span> → <span class="mono to">3 h</span> a settimana, incassi più regolari</div>
-      </article>
-
-      <article class="card">
-        <div class="card-head"><h3>Fascicolo cliente unico e numeri sempre pronti</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Documenti sparsi tra mail, archivio cartaceo, database e professionisti esterni</li><li>Le scadenze delle pratiche si seguono per mail</li><li>Un'ora per mettere insieme fatturato, previsioni e pagamenti</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Un fascicolo digitale per ogni cliente, con ricerca in linguaggio naturale ("ultimo CPI del condominio di via...")</li><li>Scadenze di SCIA e CPI con promemoria</li><li>Un riepilogo automatico ogni mattina: fatturato, preventivi aperti, scaduto, interventi del giorno</li></ul></div>
+        <div class="people">
+          <div class="person">
+            <span class="avatar">FS</span>
+            <div style="min-width:0">
+              <b>Francesco Scumace</b>
+              <span class="role">Lean Specialist · AI · Digital Transformation</span>
+              <span class="ln"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>francesco@gruppoethos.com</span>
+              <span class="ln"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>+39 392 977 2103</span>
+            </div>
+          </div>
+          <div class="person">
+            <span class="avatar">BS</span>
+            <div style="min-width:0">
+              <b>Beppe Scotti</b>
+              <span class="role">Vision &amp; Governance</span>
+              <span class="ln"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>beppe.scotti@gruppoethos.com</span>
+              <span class="ln"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>039 971 1064</span>
+            </div>
+          </div>
         </div>
-        <div class="gain">Documenti trovati in pochi secondi e numeri pronti senza estrazioni</div>
-      </article>
+      </div>
+    </section>
 
-      <article class="card">
-        <div class="card-head"><h3>Le persone: formazione e nuovo modo di lavorare</h3><div class="tags"><span class="tag human">Human</span><span class="tag lean">Lean</span></div></div>
-        <div class="cols">
-          <div><h4>Oggi</h4><ul><li>Usate già ChatGPT, Gemini e Claude, ognuno a modo suo</li><li>Norme trasmesse ai tecnici con corsi e riunioni periodiche</li></ul></div>
-          <div><h4>Cosa facciamo</h4><ul><li>Percorso Ethos Lab AI per ufficio e direzione: uso sicuro dell'AI, raccolta di prompt aziendali, regole sui dati dei clienti</li><li>Procedure standard per tecnici e segreteria, scritte con loro</li><li>Un assistente che risponde ai tecnici su norme e procedure interne</li></ul></div>
-        </div>
-        <div class="gain">Gli strumenti funzionano solo se la squadra li adotta: per questo coinvolgiamo le persone fin dall'inizio</div>
-      </article>
+  </div>
+</main>
 
-    </div>
-  </section>
+<footer>
+  <span>Realizzato da EthosInnova — ethosinnova.it</span>
+  <span>Via Carlo Cattaneo 29, Vimercate (MB)</span>
+</footer>
 
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Il metodo</div>
-      <h2>Chi fa cosa: macchina, persona o entrambe</h2>
-      <p class="muted">Per ogni attività scegliamo il livello giusto. Non automatizziamo tutto: liberiamo tempo dove serve e lasciamo alle persone le decisioni e le relazioni.</p>
-    </div>
-    <div class="levels">
-      <div class="level"><h3>Artificiale</h3><p>Il sistema lavora da solo e la persona controlla le eccezioni. Esempi: attestati, solleciti, fatturazione degli interventi in regola.</p></div>
-      <div class="level b"><h3>Bionico</h3><p>L'AI prepara, la persona decide. Esempi: piano dei giri, bozza del preventivo, priorità dei crediti.</p></div>
-      <div class="level h"><h3>Umano</h3><p>Resta alla persona, con informazioni migliori. Esempi: trattativa commerciale, telefonata al cliente in ritardo, gestione dei tecnici.</p></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Il percorso</div>
-      <h2>Da dove partiamo e in che ordine</h2>
-    </div>
-    <div class="phases">
-      <div class="phase"><span class="when">Fase 0 · 2-3 settimane</span><h3>Mappatura in azienda</h3><ul><li>Due giornate con direzione, segreteria, responsabile tecnico e un paio di tecnici</li><li>Mappa del flusso di valore dalla richiesta all'incasso e del processo formazione; caccia agli sprechi (Muda Safari)</li><li>Rilievo dei tempi reali e verifica di come leggere e scrivere i dati di Artax</li><li>Risultato: mappa attuale e futura, priorità confermate e stima di impatto</li></ul></div>
-      <div class="phase"><span class="when">Primi 30 giorni</span><h3>Risultati rapidi</h3><ul><li>Solleciti di pagamento automatici</li><li>Richiamo automatico dei preventivi aperti</li><li>Scadenziario formazione con attestati automatici</li></ul></div>
-      <div class="phase"><span class="when">30-60 giorni</span><h3>Il cuore operativo</h3><ul><li>Pianificazione assistita dei giri con quota per le urgenze</li><li>Controllo automatico dei rapportini e fatturazione in blocco</li><li>Bozze di preventivo generate dall'AI</li></ul></div>
-      <div class="phase" style="padding-bottom:0"><span class="when">60-90 giorni</span><h3>Consolidamento</h3><ul><li>Fascicolo cliente unico e riepilogo quotidiano dei numeri</li><li>Percorso Ethos Lab AI per la squadra e procedure standard</li><li>Verifica dei risultati rispetto alla mappatura iniziale</li></ul></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Impatto atteso</div>
-      <h2>Il tempo che torna disponibile</h2>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Attività</th><th class="n">Oggi (h/sett)</th><th class="n">Dopo (h/sett)</th><th class="n">Recuperate</th></tr></thead>
-        <tbody>
-          <tr><td>Fatturazione</td><td class="n">30</td><td class="n">12</td><td class="n">18</td></tr>
-          <tr><td>Preventivazione</td><td class="n">30</td><td class="n">15</td><td class="n">15</td></tr>
-          <tr><td>Organizzazione giri</td><td class="n">20</td><td class="n">7</td><td class="n">13</td></tr>
-          <tr><td>Corsi e attestati</td><td class="n">20</td><td class="n">6</td><td class="n">14</td></tr>
-          <tr><td>Recupero crediti</td><td class="n">10</td><td class="n">3</td><td class="n">7</td></tr>
-        </tbody>
-        <tfoot><tr><td>Totale</td><td class="n">110</td><td class="n">43</td><td class="n">67</td></tr></tfoot>
-      </table>
-    </div>
-    <p>Circa <strong>67 ore a settimana</strong>, l'equivalente di <strong>oltre una persona e mezza</strong>, da spostare su clienti, commerciale e crescita. A questo si aggiunge il fatturato oggi perso: preventivi non richiamati e aggiornamenti dei corsi non proposti.</p>
-  </section>
-
-  <section>
-    <div class="sec-head">
-      <div class="eyebrow">Prima di partire</div>
-      <h2>Cosa ci serve da voi</h2>
-    </div>
-    <ul class="list">
-      <li>Il rapportino di intervento che ci avete anticipato, più un esempio di preventivo e di fattura</li>
-      <li>Un contatto con chi ha sviluppato Artax, per capire come leggere e scrivere i dati</li>
-      <li>Il valore medio di un preventivo e quanti ne vengono accettati, per stimare il fatturato recuperabile</li>
-      <li>Conferma delle ore sui giri: nel questionario compaiono sia 20 ore a settimana sia 6 ore al giorno dell'operatore</li>
-      <li>Che tipo di preventivi compongono i 1.000 al mese: quanti sono semplici e quanti richiedono un sopralluogo</li>
-    </ul>
-  </section>
-
-  <section class="cta">
-    <h2>Prossimo passo: un incontro di un'ora</h2>
-    <p>Ti presentiamo questa proposta, rispondiamo alle domande e fissiamo le giornate di mappatura. La consulenza iniziale è gratuita.</p>
-    <div class="contacts">
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Francesco Scumace</span>
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>francesco@gruppoethos.com</span>
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>+39 392 977 2103</span>
-    </div>
-  </section>
-
-  <footer>
-    <span>Realizzato da EthosInnova — ethosinnova.it</span>
-    <span>Basato sul questionario ANS-20261105-NE5BZR</span>
-  </footer>
-
-</div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('js');
+  var vh = window.innerHeight || 800;
+  var els = document.querySelectorAll('.rv, [data-anim]');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      var el = en.target;
+      requestAnimationFrame(function(){ el.classList.remove('pre'); });
+      el.querySelectorAll && el.querySelectorAll('[data-count]').forEach(count);
+      io.unobserve(el);
+    });
+  }, {threshold:.15});
+  els.forEach(function(el){
+    var r = el.getBoundingClientRect();
+    if (r.top > vh * 0.95) { el.classList.add('pre'); io.observe(el); }
+  });
+  function fmt(n, sep){ return sep ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.') : String(n); }
+  function count(el){
+    if (el.dataset.done) return; el.dataset.done = 1;
+    var end = +el.dataset.count, sep = el.dataset.sep, t0 = null, dur = 1400;
+    function tick(t){ if(!t0) t0 = t; var p = Math.min((t - t0) / dur, 1); var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(Math.round(end * e), sep); if (p < 1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  }
+  // contatori dell'hero: partono subito al caricamento (valore finale già nel markup)
+  document.querySelectorAll('.stats [data-count]').forEach(function(el){ setTimeout(function(){ count(el); }, 300); });
+})();
+</script>
