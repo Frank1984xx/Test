@@ -1,0 +1,398 @@
+<title>Proposta Antincendio Sestese</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: documento a colonna singola (max 980px), sezioni scandite da etichette, mappa processo come catena orizzontale scrollabile */
+:root{
+  --paper:#f4f7f6; --surface:#ffffff; --ink:#13201c; --muted:#56665f; --line:#d9e3df;
+  --accent:#1d6b57; --accent-soft:#e3f0eb; --signal:#c2412d; --signal-soft:#fbe9e5; --amber:#a86a12; --amber-soft:#f8eedc;
+  --f-display:"Archivo","Inter",system-ui,sans-serif; --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f1715; --surface:#16211e; --ink:#e6eeeb; --muted:#9aaba4; --line:#2a3833;
+  --accent:#5cc3a3; --accent-soft:#1a332c; --signal:#ff8a73; --signal-soft:#3a1f1a; --amber:#e3a94c; --amber-soft:#33281a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1715; --surface:#16211e; --ink:#e6eeeb; --muted:#9aaba4; --line:#2a3833;
+  --accent:#5cc3a3; --accent-soft:#1a332c; --signal:#ff8a73; --signal-soft:#3a1f1a; --amber:#e3a94c; --amber-soft:#33281a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,3vw,1.9rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+section{display:grid;gap:20px}
+.sec-head{display:grid;gap:8px}
+
+/* Header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:20px}
+.brand{display:flex;align-items:center;gap:10px;min-height:44px}
+.brand img{height:44px;width:auto}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-.01em}
+.wordmark span{color:var(--accent)}
+.meta{font-size:.85rem;color:var(--muted);text-align:right}
+.hero{display:grid;gap:18px}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:62ch}
+
+/* Numeri */
+.figures{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fig{background:var(--surface);padding:18px 18px 16px;display:grid;gap:4px;align-content:start}
+.fig b{font-family:var(--f-display);font-size:2rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.fig.alert b{color:var(--signal)}
+.fig small{color:var(--muted);font-size:.85rem;line-height:1.4}
+
+/* Fotografia */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 16px;font-size:.95rem}
+.kv span:nth-child(even){font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.keep{display:flex;gap:12px;align-items:flex-start;background:var(--accent-soft);border-radius:10px;padding:16px 18px}
+.keep svg{flex:none;margin-top:2px;color:var(--accent)}
+
+/* Mappa processo */
+.flow-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.flow{display:flex;gap:0;padding:20px;min-width:1040px;align-items:stretch}
+.step{flex:1;display:grid;grid-template-rows:auto auto 1fr;gap:6px;padding:0 10px;position:relative;font-size:.85rem}
+.step:not(:last-child)::after{content:"";position:absolute;right:-5px;top:11px;width:10px;height:10px;border-top:2px solid var(--muted);border-right:2px solid var(--muted);transform:rotate(45deg)}
+.step .dot{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-weight:700;font-size:.75rem}
+.step.pain .dot{background:var(--signal)}
+.step b{font-size:.9rem;line-height:1.3}
+.step em{font-style:normal;color:var(--muted);line-height:1.4}
+.step.pain em{color:var(--signal)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* Ore */
+.bars{display:grid;gap:12px}
+.bar{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:12px;align-items:center}
+.bar .lab{font-size:.9rem;line-height:1.3}
+.bar .lab small{display:block;color:var(--muted)}
+.track{position:relative;height:28px;background:var(--paper);border-radius:4px}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--signal);border-radius:4px}
+.after{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:4px}
+.track .num{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:.8rem;color:var(--ink)}
+.axis{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:12px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.axis div:last-child{display:flex;justify-content:space-between}
+@media (max-width:560px){.bar,.axis{grid-template-columns:1fr}.axis div:first-child{display:none}}
+
+/* Interventi */
+.cards{display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px;display:grid;gap:14px}
+.card-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.ai{border-color:var(--accent);color:var(--accent)}
+.tag.lean{border-color:var(--amber);color:var(--amber)}
+.tag.human{border-color:var(--ink);color:var(--ink)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.cols > div{display:grid;gap:6px;align-content:start;min-width:0}
+.cols h4{margin:0;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.cols ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.gain{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem;border-top:1px dashed var(--line);padding-top:12px}
+.gain .mono{font-weight:500}
+.gain .from{color:var(--signal)}
+.gain .to{color:var(--accent)}
+
+/* Livelli */
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.level{border-top:3px solid var(--accent);background:var(--surface);border-radius:0 0 10px 10px;padding:18px;display:grid;gap:8px;align-content:start}
+.level.b{border-top-color:var(--amber)}
+.level.h{border-top-color:var(--ink)}
+
+/* Percorso */
+.phases{display:grid;gap:0;border-left:2px solid var(--line);margin-left:8px}
+.phase{display:grid;gap:8px;padding:0 0 26px 24px;position:relative}
+.phase::before{content:"";position:absolute;left:-9px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--accent)}
+.phase .when{font-family:var(--f-mono);font-size:.8rem;color:var(--accent)}
+.phase ul{margin:0;padding-left:18px;display:grid;gap:4px}
+
+/* Tabella */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+tfoot td{font-weight:700;border-bottom:0}
+
+.list{margin:0;padding-left:20px;display:grid;gap:8px;max-width:70ch}
+.cta{background:var(--ink);color:var(--paper);border-radius:12px;padding:28px;display:grid;gap:14px}
+.cta h2{color:var(--paper)}
+.cta .contacts{display:flex;gap:10px 28px;flex-wrap:wrap;font-size:.95rem}
+.cta .contacts span{display:flex;gap:8px;align-items:center;user-select:all}
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <img src="https://lh3.googleusercontent.com/d/1U_BahKYxXyJJrNbtDb_ejApl0S0D7_yS" alt="EthosInnova" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+      <div class="wordmark" hidden>Ethos<span>Innova</span></div>
+    </div>
+    <div class="meta">Proposta di intervento<br>5 novembre 2026</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Per Daniele Nuvoli · Antincendio Sestese</div>
+    <h1>Più giri, preventivi e corsi con la stessa squadra</h1>
+    <p class="lead">Abbiamo letto le 65 risposte del questionario. Il quadro è chiaro: l'azienda ha volumi importanti e un gestionale nuovo, ma cinque attività manuali assorbono la segreteria. Qui trovi dove interverremmo con il nostro metodo Lean, AI e Human, in che ordine e con quale risultato atteso.</p>
+  </section>
+
+  <section>
+    <div class="figures">
+      <div class="fig alert"><b>110 h</b><small>a settimana spese in 5 attività manuali, quasi tutte in segreteria (circa 2,7 persone a tempo pieno)</small></div>
+      <div class="fig alert"><b>1.000</b><small>preventivi al mese, che quasi mai vengono richiamati se non accettati</small></div>
+      <div class="fig"><b>500</b><small>interventi tecnici al mese, organizzati con telefono e WhatsApp</small></div>
+      <div class="fig"><b>200</b><small>corsi all'anno, gestiti a mano dall'iscrizione all'attestato</small></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Fotografia dell'azienda</div>
+      <h2>Cosa abbiamo capito</h2>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <h3>Le persone</h3>
+        <div class="kv">
+          <span>Direzione</span><span>2</span>
+          <span>Ufficio e amministrazione</span><span>2</span>
+          <span>Commerciale</span><span>1</span>
+          <span>Tecnici sul campo</span><span>7</span>
+          <span>Magazzino e logistica</span><span>1</span>
+          <span>Formazione</span><span>1</span>
+          <span>Collaboratori esterni</span><span>5</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>I volumi</h3>
+        <div class="kv">
+          <span>Clienti attivi</span><span>2.600</span>
+          <span>Presidi in gestione</span><span>300.000</span>
+          <span>Interventi al mese</span><span>500</span>
+          <span>Preventivi al mese</span><span>1.000</span>
+          <span>Corsi all'anno</span><span>200</span>
+          <span>Pratiche SCIA e CPI all'anno</span><span>20</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Il business</h3>
+        <p>Il fatturato arriva da manutenzione periodica, vendita presidi, sicurezza D.Lgs. 81/08 e formazione. Nei prossimi due anni volete più clienti e più automazione, senza assumere.</p>
+        <p class="muted">Le richieste arrivano da telefono, email, form del sito, passaparola e amministratori di condominio.</p>
+      </div>
+      <div class="panel">
+        <h3>Gli strumenti</h3>
+        <p>Artax (gestionale costruito su misura), software manutenzioni, app dei tecnici, WhatsApp, calendario condiviso. In azienda usate già ChatGPT, Gemini e Claude per lettere, relazioni e informazioni tecniche.</p>
+      </div>
+    </div>
+    <div class="keep">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      <p><strong>Artax resta al centro.</strong> È appena installato e funziona per scadenze, magazzino, noleggi e fatturazione. Non lo sostituiamo: costruiamo intorno ad Artax gli strumenti che oggi mancano e li colleghiamo ai suoi dati.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Mappatura preliminare</div>
+      <h2>Il processo oggi, dalla richiesta all'incasso</h2>
+      <p class="muted">Ricostruito dalle risposte. Lo verifichiamo e lo completiamo insieme in azienda nella prima fase.</p>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="step"><span class="dot">1</span><b>Richiesta</b><em>Telefono, mail, sito, amministratori</em></div>
+        <div class="step"><span class="dot">2</span><b>Sopralluogo</b><em>Il tecnico manda le note via mail</em></div>
+        <div class="step pain"><span class="dot">3</span><b>Preventivo</b><em>L'ufficio elabora e attende i fornitori: da 1 a 7 giorni</em></div>
+        <div class="step pain"><span class="dot">4</span><b>Attesa risposta</b><em>Nessun richiamo dei preventivi aperti</em></div>
+        <div class="step pain"><span class="dot">5</span><b>Pianificazione giri</b><em>Fatta per l'80% a mano, 6 ore al giorno, urgenze tolte ai programmati</em></div>
+        <div class="step"><span class="dot">6</span><b>Intervento</b><em>Registrato su app o tablet</em></div>
+        <div class="step pain"><span class="dot">7</span><b>Verifica e fattura</b><em>L'ufficio controlla e riporta in Artax: 30 ore a settimana</em></div>
+        <div class="step pain"><span class="dot">8</span><b>Incasso</b><em>Solleciti fatti a mano</em></div>
+      </div>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow" style="min-width:820px">
+        <div class="step"><span class="dot">1</span><b>Iscrizione</b><em>Raccolta a mano</em></div>
+        <div class="step pain"><span class="dot">2</span><b>Organizzazione corso</b><em>Aule, docenti e partecipanti a mano</em></div>
+        <div class="step"><span class="dot">3</span><b>Erogazione</b><em>Registro presenze</em></div>
+        <div class="step pain"><span class="dot">4</span><b>Attestati</b><em>Compilati uno per uno</em></div>
+        <div class="step pain"><span class="dot">5</span><b>Scadenza aggiornamento</b><em>Avvisi a mano: qui capitano le dimenticanze</em></div>
+      </div>
+    </div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Passaggio che funziona</span><span><i style="background:var(--signal)"></i>Punto critico emerso dal questionario</span></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Dove si perde tempo</div>
+      <h2>Ore a settimana: oggi e dopo l'intervento</h2>
+      <p class="muted">Ore dichiarate nel questionario. Le stime dopo l'intervento sono prudenziali e le confermiamo con i rilievi della mappatura.</p>
+    </div>
+    <div class="bars">
+      <div class="bar"><div class="lab">Fatturazione<small>Segreteria</small></div><div class="track"><div class="fill" style="width:100%"></div><div class="after" style="width:40%"></div><span class="num">30 → 12</span></div></div>
+      <div class="bar"><div class="lab">Preventivazione<small>Segreteria</small></div><div class="track"><div class="fill" style="width:100%"></div><div class="after" style="width:50%"></div><span class="num">30 → 15</span></div></div>
+      <div class="bar"><div class="lab">Organizzazione giri<small>Segreteria e resp. tecnico</small></div><div class="track"><div class="fill" style="width:66.7%"></div><div class="after" style="width:23.3%"></div><span class="num">20 → 7</span></div></div>
+      <div class="bar"><div class="lab">Corsi e attestati<small>Segreteria</small></div><div class="track"><div class="fill" style="width:66.7%"></div><div class="after" style="width:20%"></div><span class="num">20 → 6</span></div></div>
+      <div class="bar"><div class="lab">Recupero crediti<small>Segreteria</small></div><div class="track"><div class="fill" style="width:33.3%"></div><div class="after" style="width:10%"></div><span class="num">10 → 3</span></div></div>
+      <div class="axis"><div></div><div><span>0</span><span>10</span><span>20</span><span>30 h</span></div></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--signal)"></i>Oggi</span><span><i style="background:var(--accent)"></i>Stima dopo l'intervento</span></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Gli interventi</div>
+      <h2>Cosa facciamo, area per area</h2>
+      <p class="muted">In ordine di priorità: prima le attività che volete far sparire e quelle dove capitano più errori.</p>
+    </div>
+    <div class="cards">
+
+      <article class="card">
+        <div class="card-head"><h3>Pianificazione automatica dei giri di manutenzione</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Bionico</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Giri organizzati per l'80% dall'operatore, 6 ore al giorno al telefono e su WhatsApp</li><li>Le urgenze tolgono tecnici ai controlli programmati</li><li>È il punto con più errori</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Leggiamo le scadenze da Artax e raggruppiamo i presidi per zona, finestra di scadenza e competenze del tecnico</li><li>L'AI propone il piano settimanale; il responsabile tecnico lo rivede e lo approva</li><li>Riserviamo ogni giorno una quota di capacità per le urgenze, così il programma non salta</li><li>Avviso automatico al cliente con data e fascia oraria, con conferma o spostamento via messaggio</li></ul></div>
+        </div>
+        <div class="gain">Stima: <span class="mono from">20 h</span> → <span class="mono to">7 h</span> a settimana, meno chiamate e meno appuntamenti mancati</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Dal rapportino alla fattura senza ricopiare</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Il tecnico registra su app, poi l'ufficio verifica ogni intervento e lo trasferisce in fatturazione</li><li>30 ore a settimana di segreteria</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Un controllo automatico confronta ogni rapportino con contratto, listino e materiali usati</li><li>Gli interventi in regola passano in fatturazione in blocco su Artax</li><li>La segreteria vede solo le eccezioni: dati mancanti, prezzi fuori listino, materiali non previsti</li></ul></div>
+        </div>
+        <div class="gain">Stima: <span class="mono from">30 h</span> → <span class="mono to">12 h</span> a settimana, fatture emesse prima</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Preventivi più veloci e richiamati</h3><div class="tags"><span class="tag ai">AI</span><span class="tag lean">Lean</span><span class="tag">Bionico</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Sopralluogo, mail del tecnico, elaborazione in ufficio, attesa del fornitore: da 1 a 7 giorni</li><li>1.000 preventivi al mese e quasi nessun richiamo</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Voci standard e listino unico per le lavorazioni ricorrenti</li><li>L'AI trasforma le note del sopralluogo (anche vocali o foto) in una bozza di preventivo pronta da controllare</li><li>Richiesta prezzi ai fornitori con un modulo standard e promemoria automatico</li><li>Richiamo automatico a 7 e 15 giorni per i preventivi aperti, con elenco delle trattative calde per il commerciale</li></ul></div>
+        </div>
+        <div class="gain">Stima: <span class="mono from">30 h</span> → <span class="mono to">15 h</span> a settimana, più preventivi chiusi a parità di richieste</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Formazione: iscrizioni, attestati e scadenze in automatico</h3><div class="tags"><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Dall'iscrizione all'attestato è tutto a mano</li><li>Gli avvisi di scadenza dei corsi partono a mano e qualcuno si perde</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Iscrizione online con dati del partecipante e dell'azienda</li><li>Registro presenze digitale e attestati generati in automatico dal modello</li><li>Scadenziario degli aggiornamenti 81/08 con avviso automatico al cliente e proposta della prossima data</li></ul></div>
+        </div>
+        <div class="gain">Stima: <span class="mono from">20 h</span> → <span class="mono to">6 h</span> a settimana. Ogni scadenza non persa è un corso venduto</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Solleciti di pagamento automatici</h3><div class="tags"><span class="tag ai">AI</span><span class="tag human">Human</span><span class="tag">Bionico</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Solleciti fatti a mano, 10 ore a settimana</li><li>È una delle due attività che vorreste far sparire</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Lo scadenziario di Artax attiva una sequenza di avvisi: promemoria cortese, secondo avviso, sollecito formale</li><li>La telefonata resta alla persona, solo per i casi che non si sbloccano</li><li>Una vista unica dello scaduto per cliente e per anzianità</li></ul></div>
+        </div>
+        <div class="gain">Stima: <span class="mono from">10 h</span> → <span class="mono to">3 h</span> a settimana, incassi più regolari</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Fascicolo cliente unico e numeri sempre pronti</h3><div class="tags"><span class="tag lean">Lean</span><span class="tag ai">AI</span><span class="tag">Artificiale</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Documenti sparsi tra mail, archivio cartaceo, database e professionisti esterni</li><li>Le scadenze delle pratiche si seguono per mail</li><li>Un'ora per mettere insieme fatturato, previsioni e pagamenti</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Un fascicolo digitale per ogni cliente, con ricerca in linguaggio naturale ("ultimo CPI del condominio di via...")</li><li>Scadenze di SCIA e CPI con promemoria</li><li>Un riepilogo automatico ogni mattina: fatturato, preventivi aperti, scaduto, interventi del giorno</li></ul></div>
+        </div>
+        <div class="gain">Documenti trovati in pochi secondi e numeri pronti senza estrazioni</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head"><h3>Le persone: formazione e nuovo modo di lavorare</h3><div class="tags"><span class="tag human">Human</span><span class="tag lean">Lean</span></div></div>
+        <div class="cols">
+          <div><h4>Oggi</h4><ul><li>Usate già ChatGPT, Gemini e Claude, ognuno a modo suo</li><li>Norme trasmesse ai tecnici con corsi e riunioni periodiche</li></ul></div>
+          <div><h4>Cosa facciamo</h4><ul><li>Percorso Ethos Lab AI per ufficio e direzione: uso sicuro dell'AI, raccolta di prompt aziendali, regole sui dati dei clienti</li><li>Procedure standard per tecnici e segreteria, scritte con loro</li><li>Un assistente che risponde ai tecnici su norme e procedure interne</li></ul></div>
+        </div>
+        <div class="gain">Gli strumenti funzionano solo se la squadra li adotta: per questo coinvolgiamo le persone fin dall'inizio</div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Il metodo</div>
+      <h2>Chi fa cosa: macchina, persona o entrambe</h2>
+      <p class="muted">Per ogni attività scegliamo il livello giusto. Non automatizziamo tutto: liberiamo tempo dove serve e lasciamo alle persone le decisioni e le relazioni.</p>
+    </div>
+    <div class="levels">
+      <div class="level"><h3>Artificiale</h3><p>Il sistema lavora da solo e la persona controlla le eccezioni. Esempi: attestati, solleciti, fatturazione degli interventi in regola.</p></div>
+      <div class="level b"><h3>Bionico</h3><p>L'AI prepara, la persona decide. Esempi: piano dei giri, bozza del preventivo, priorità dei crediti.</p></div>
+      <div class="level h"><h3>Umano</h3><p>Resta alla persona, con informazioni migliori. Esempi: trattativa commerciale, telefonata al cliente in ritardo, gestione dei tecnici.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Il percorso</div>
+      <h2>Da dove partiamo e in che ordine</h2>
+    </div>
+    <div class="phases">
+      <div class="phase"><span class="when">Fase 0 · 2-3 settimane</span><h3>Mappatura in azienda</h3><ul><li>Due giornate con direzione, segreteria, responsabile tecnico e un paio di tecnici</li><li>Mappa del flusso di valore dalla richiesta all'incasso e del processo formazione; caccia agli sprechi (Muda Safari)</li><li>Rilievo dei tempi reali e verifica di come leggere e scrivere i dati di Artax</li><li>Risultato: mappa attuale e futura, priorità confermate e stima di impatto</li></ul></div>
+      <div class="phase"><span class="when">Primi 30 giorni</span><h3>Risultati rapidi</h3><ul><li>Solleciti di pagamento automatici</li><li>Richiamo automatico dei preventivi aperti</li><li>Scadenziario formazione con attestati automatici</li></ul></div>
+      <div class="phase"><span class="when">30-60 giorni</span><h3>Il cuore operativo</h3><ul><li>Pianificazione assistita dei giri con quota per le urgenze</li><li>Controllo automatico dei rapportini e fatturazione in blocco</li><li>Bozze di preventivo generate dall'AI</li></ul></div>
+      <div class="phase" style="padding-bottom:0"><span class="when">60-90 giorni</span><h3>Consolidamento</h3><ul><li>Fascicolo cliente unico e riepilogo quotidiano dei numeri</li><li>Percorso Ethos Lab AI per la squadra e procedure standard</li><li>Verifica dei risultati rispetto alla mappatura iniziale</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Impatto atteso</div>
+      <h2>Il tempo che torna disponibile</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Attività</th><th class="n">Oggi (h/sett)</th><th class="n">Dopo (h/sett)</th><th class="n">Recuperate</th></tr></thead>
+        <tbody>
+          <tr><td>Fatturazione</td><td class="n">30</td><td class="n">12</td><td class="n">18</td></tr>
+          <tr><td>Preventivazione</td><td class="n">30</td><td class="n">15</td><td class="n">15</td></tr>
+          <tr><td>Organizzazione giri</td><td class="n">20</td><td class="n">7</td><td class="n">13</td></tr>
+          <tr><td>Corsi e attestati</td><td class="n">20</td><td class="n">6</td><td class="n">14</td></tr>
+          <tr><td>Recupero crediti</td><td class="n">10</td><td class="n">3</td><td class="n">7</td></tr>
+        </tbody>
+        <tfoot><tr><td>Totale</td><td class="n">110</td><td class="n">43</td><td class="n">67</td></tr></tfoot>
+      </table>
+    </div>
+    <p>Circa <strong>67 ore a settimana</strong>, l'equivalente di <strong>oltre una persona e mezza</strong>, da spostare su clienti, commerciale e crescita. A questo si aggiunge il fatturato oggi perso: preventivi non richiamati e aggiornamenti dei corsi non proposti.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Prima di partire</div>
+      <h2>Cosa ci serve da voi</h2>
+    </div>
+    <ul class="list">
+      <li>Il rapportino di intervento che ci avete anticipato, più un esempio di preventivo e di fattura</li>
+      <li>Un contatto con chi ha sviluppato Artax, per capire come leggere e scrivere i dati</li>
+      <li>Il valore medio di un preventivo e quanti ne vengono accettati, per stimare il fatturato recuperabile</li>
+      <li>Conferma delle ore sui giri: nel questionario compaiono sia 20 ore a settimana sia 6 ore al giorno dell'operatore</li>
+      <li>Che tipo di preventivi compongono i 1.000 al mese: quanti sono semplici e quanti richiedono un sopralluogo</li>
+    </ul>
+  </section>
+
+  <section class="cta">
+    <h2>Prossimo passo: un incontro di un'ora</h2>
+    <p>Ti presentiamo questa proposta, rispondiamo alle domande e fissiamo le giornate di mappatura. La consulenza iniziale è gratuita.</p>
+    <div class="contacts">
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Francesco Scumace</span>
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>francesco@gruppoethos.com</span>
+      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>+39 392 977 2103</span>
+    </div>
+  </section>
+
+  <footer>
+    <span>Realizzato da EthosInnova — ethosinnova.it</span>
+    <span>Basato sul questionario ANS-20261105-NE5BZR</span>
+  </footer>
+
+</div>
