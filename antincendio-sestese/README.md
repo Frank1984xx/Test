@@ -15,6 +15,7 @@ Contenuti:
 
 ## File
 - `proposta.html` – la proposta (brand EthosInnova, icone SVG, tema chiaro e scuro)
+- `logo-ethosinnova.png`, `logo-ethosinnova-scuro.png` – logo ufficiale (versione per sfondo chiaro e per sfondo scuro), incorporato nella pagina
 - `README.md` – questo file
 
 ## Google Sheet collegato
